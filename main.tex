@@ -1,0 +1,28 @@
+\documentclass[12pt,twoside]{article}
+\usepackage{import}
+\newcommand{\reporttitle}{Multidimensional Utility Maximisation in an Incomplete Market}
+\newcommand{\reportauthor}{Ivan Kirev}
+\newcommand{\reporttype}{\vspace{-2.5cm}}
+\newcommand{\cid}{01738166}
+
+% include files that load packages and define macros
+\input{Others/includes.tex} % various packages needed for maths etc.
+\input{Others/notation.tex} % short-hand notation and macros
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+% front page
+\input{Chapters/titlepage.tex}
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{Chapters/introduction.tex}
+\input{Chapters/non_markov_case.tex}
+\end{document}

@@ -1,0 +1,31 @@
+\section{Introduction}
+\subsection{Problem Statement}
+We consider an $n-$dimensional process $X(t)$ described by
+\begin{equation*}
+    \begin{cases}
+        \d X(t) &= \big[(A(t, \eta(t)) X(t) + B(t, \eta(t)) \,  \pi(t)\big] \d t + \sum_{i=1}^d \big[C_i(t, \eta(t)) X(t) + D_i(t, \eta(t)) \, \pi(t)\big] \d W_i(t)\\
+        X(0) &= x_0 \in \R^n,
+    \end{cases}
+\end{equation*}
+where $W(t)$ is a $d-$dimensional Brownian motion, $\pi(t) \in K \subset \R^m$ is the control with $K$ a closed convex set, $\eta(t)$ is a Markov chain process, $A, C_i \in \R^{n \times n}, i \in \{1,\dots, d\}$ and $B, D_i \in \R^{n \times m}, i \in \{1, \dots, d \}$ are functions of both time and the Markov chain process $\eta(t)$.\\
+
+We denote the solution to the system by simply $X(t),$ $t \in [t_0, T]$.\\
+
+The cost functional is given by
+\begin{equation}
+    J(t, X(t), \pi(t)) := \E \bigg[ \int_{t_0}^T f(t, X(t), \pi(t)) \d t + g(X(T))\bigg],
+\end{equation}
+where $f$ is a quadratic function
+\begin{align*}
+    f(t, X(t), \pi(t)) &= \frac{1}{2} X^T(t) Q(t) X(t) + X^T(t) S^T(t) \pi(t) + \frac{1}{2}\pi^T(t) R(t) \pi(t)\\
+    g(X(T)) &= \frac12 X^T(T) G(T) X(T) + X^T(T) L(T).
+\end{align*}
+The objective is to minimise the cost function over the control and we introduce the associated value function
+\begin{equation}
+    v(t, X(t)) := \inf_{\pi \in K} J(t, X(t), \pi(t)). 
+\end{equation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\subsection{Assumptions}
