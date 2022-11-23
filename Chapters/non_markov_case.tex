@@ -179,22 +179,22 @@ where $\pi^\ast$ is as in \eqref{eq: control_optimal_primal_hjb} and the termina
 \subsubsection{Solving the Primal Hamilton-Jacobi-Bellman Equation}
 We assume that $v(t,x)$ is a quadratic function in $x$ and we use the ansatz
 \begin{equation}
-    v(t,x) = \frac12 x^T \alpha(t) x + x^T \beta(t) + \gamma(t), 
+    v(t,x) = \frac12 x^T P(t) x + x^T M(t) + N(t), 
     \label{eq: ansatz_primal_hjb}
 \end{equation}
 with terminal conditions:
 \begin{equation}
-    \alpha(T) = -G(T), \quad \beta(T) = - L(T), \quad \gamma(T) = 0. \label{eq: terminal_conditions_pirmal_hjb}
+    P(T) = -G(T), \quad M(T) = - L(T), \quad N(T) = 0. \label{eq: terminal_conditions_pirmal_hjb}
 \end{equation}
 Then 
 \begin{align*}
-    &\frac{\partial v}{\partial t}(t,x) = \frac12 x^T \dot{\alpha}(t) x + x^T \dot{\beta}(t) + \dot{\gamma}(t)\\
-    &D_x[v(t,x)] = \alpha(t) x + \beta(t)\\
-    &D^2_x[v(t,x)] = \alpha(t).
+    &\frac{\partial v}{\partial t}(t,x) = \frac12 x^T \dot{P}(t) x + x^T \dot{M}(t) + \dot{N}(t)\\
+    &D_x[v(t,x)] = P(t) x + M(t)\\
+    &D^2_x[v(t,x)] = P(t).
 \end{align*}
 Substituting in \eqref{eq: control_optimal_primal_hjb} we get the optimal control
 \begin{equation*}
-    \pi^\ast = \bigg(\sum_{i=1}^d D_i^T \alpha D_i - R\bigg)^{-1} \bigg(S x - B^T \alpha x - B^T \beta - \sum_{i=1}^d D_i^T \alpha C_i x\bigg)
+    \pi^\ast = \bigg(\sum_{i=1}^d D_i^T P D_i - R\bigg)^{-1} \bigg(S x - B^T P x - B^T M - \sum_{i=1}^d D_i^T P C_i x\bigg)
 \end{equation*}
 We can write this as 
 \begin{equation*}
@@ -202,28 +202,28 @@ We can write this as
 \end{equation*}
 where
 \begin{equation}
-    \vartheta_1 = \bigg(\sum_{i=1}^d D_i^T \alpha D_i - R\bigg)^{-1} \bigg(S - B^T \alpha - \sum_{i=1}^d D_i^T \alpha C_i \bigg), \quad \kappa_1 = -\bigg(\sum_{i=1}^d D_i^T \alpha D_i + R\bigg)^{-1} B^T \beta \label{eq: theta_kappa_primal_hjb}
+    \vartheta_1 = \bigg(\sum_{i=1}^d D_i^T P D_i - R\bigg)^{-1} \bigg(S - B^T P - \sum_{i=1}^d D_i^T P C_i \bigg), \quad \kappa_1 = -\bigg(\sum_{i=1}^d D_i^T P D_i + R\bigg)^{-1} B^T M \label{eq: theta_kappa_primal_hjb}
 \end{equation}
 Substituting this into \eqref{eq: hjb_primal}, we get 
 \begin{align*}
     &\frac{\partial v}{\partial t} + (A x + B (\vartheta_1 x + \kappa_1))^T D_x[v] + \frac12 \sum_{i=1}^d (C_i x + D_i (\vartheta_1 x + \kappa_1))^T D_x^2[v](C_i x + D_i (\vartheta_1 x + \kappa_1))\\
     &- \frac12 x^T Q x - \frac12 x^T S^T (\vartheta_1 x + \kappa_1) - \frac12 {(\vartheta_1 x + \kappa_1)}^T S x - \frac12 {(\vartheta_1 x + \kappa_1)}^T R (\vartheta_1 x + \kappa_1) = 0 \implies \\
-    &\frac12 x^T \dot{\alpha} x + x^T \dot{\beta} + \dot{\gamma} + (x^T A^T + x^T \vartheta_1^T B^T + \kappa_1^T B^T)(\alpha x + \beta)\\
-    &+ \frac12 \sum_{i=1}^d (x^T C_i^T + x^T \vartheta_1^T D_i^T + \kappa_1^T D_i^T)\alpha ( C_i x + D_i \vartheta_1 x + D_i \kappa_1)\\
+    &\frac12 x^T \dot{P} x + x^T \dot{M} + \dot{N} + (x^T A^T + x^T \vartheta_1^T B^T + \kappa_1^T B^T)(P x + M)\\
+    &+ \frac12 \sum_{i=1}^d (x^T C_i^T + x^T \vartheta_1^T D_i^T + \kappa_1^T D_i^T)P ( C_i x + D_i \vartheta_1 x + D_i \kappa_1)\\
     &- \frac12 x^T Q x - \frac12 x^T S^T (\vartheta_1 x + \kappa_1) - \frac12 {(x^T \vartheta_1^T  + \kappa_1^T)} S x - \frac12 {(x^T \vartheta_1^T + \kappa_1^T)} R (\vartheta_1 x + \kappa_1) = 0
 \end{align*}
 Rewriting this, we get
 \begin{align*}
-    &x^T\bigg[ \frac12 \dot{\alpha} + \frac12 A^T \alpha + \frac12 \alpha A + \frac12 \vartheta_1^T B^T \alpha + \frac12 \alpha B \vartheta_1 + \frac12 \sum_{i=1}^d (C_i^T + \vartheta_1^T D_i^T)\alpha(C_i + D_i \vartheta_1)\\
-    &- \frac12 Q - \frac12 \vartheta_1^T S - \frac12 S^T \vartheta_1 - \frac12 \vartheta_1^T R \vartheta_1 \bigg]x + x^T \bigg[ \dot{\beta} + A^T \beta + \alpha B \kappa_1 + \vartheta_1^T B^T \beta + \\
-    &\sum_{i=1}^d (C_i^T + \vartheta_1^T D_i^T)\alpha D_i \kappa_1 -  S^T \kappa_1 - \vartheta_1^T R \kappa_1 \bigg] + \dot{\gamma} + \kappa_1^T B^T \beta + \frac12 \sum_{i=1}^d \kappa_1^T D_i^T \alpha D_i \kappa_1 - \frac12 \kappa_1^T R \kappa_1 = 0
+    &x^T\bigg[ \frac12 \dot{P} + \frac12 A^T P + \frac12 P A + \frac12 \vartheta_1^T B^T P + \frac12 P B \vartheta_1 + \frac12 \sum_{i=1}^d (C_i^T + \vartheta_1^T D_i^T)P(C_i + D_i \vartheta_1)\\
+    &- \frac12 Q - \frac12 \vartheta_1^T S - \frac12 S^T \vartheta_1 - \frac12 \vartheta_1^T R \vartheta_1 \bigg]x + x^T \bigg[ \dot{M} + A^T M + P B \kappa_1 + \vartheta_1^T B^T M + \\
+    &\sum_{i=1}^d (C_i^T + \vartheta_1^T D_i^T)P D_i \kappa_1 -  S^T \kappa_1 - \vartheta_1^T R \kappa_1 \bigg] + \dot{N} + \kappa_1^T B^T M + \frac12 \sum_{i=1}^d \kappa_1^T D_i^T P D_i \kappa_1 - \frac12 \kappa_1^T R \kappa_1 = 0
 \end{align*}
 This equation must equal zero for all $x$, hence the coefficients in front of the quadratic term, as well as $x$ and the free coefficient must be zero. Setting the coefficients to zero, we get the system
 \begin{align*}
-     \frac12 \dot{\alpha} + \frac12 A^T \alpha + \frac12 \alpha A + \frac12 \vartheta_1^T B^T \alpha + \frac12 \alpha B \vartheta_1 + &\frac12 \sum_{i=1}^d (C_i^T + \vartheta_1^T D_i^T)\alpha(C_i + D_i \vartheta_1)\\
+     \frac12 \dot{P} + \frac12 A^T P + \frac12 P A + \frac12 \vartheta_1^T B^T P + \frac12 P B \vartheta_1 + &\frac12 \sum_{i=1}^d (C_i^T + \vartheta_1^T D_i^T)P(C_i + D_i \vartheta_1)\\
      -& \frac12 Q - \frac12 \vartheta_1^T S - \frac12 S^T \vartheta_1 - \frac12 \vartheta_1^T R \vartheta_1 = 0 \numberthis \label{eq: primal_hjb_ricatti_1}\\
-     \dot{\beta} + A^T \beta + \alpha B \kappa_1 + \vartheta_1^T B^T \beta + \sum_{i=1}^d (C_i^T + \vartheta_1^T D_i^T&)\alpha D_i \kappa_1 -  S^T \kappa_1 - \vartheta_1^T R \kappa_1 = 0 \numberthis \label{eq: primal_hjb_ricatti_2}\\ 
-     \dot{\gamma} + \kappa_1^T B^T \beta + \frac12 \sum_{i=1}^d \kappa_1^T D_i^T \alpha D_i \kappa_1 - \frac12 \kappa_1^T R \kappa_1& = 0, \numberthis
+     \dot{M} + A^T M + P B \kappa_1 + \vartheta_1^T B^T M + \sum_{i=1}^d (C_i^T + \vartheta_1^T D_i^T&)P D_i \kappa_1 -  S^T \kappa_1 - \vartheta_1^T R \kappa_1 = 0 \numberthis \label{eq: primal_hjb_ricatti_2}\\ 
+     \dot{N} + \kappa_1^T B^T M + \frac12 \sum_{i=1}^d \kappa_1^T D_i^T P D_i \kappa_1 - \frac12 \kappa_1^T R \kappa_1& = 0, \numberthis
 \end{align*}
 where $\vartheta_1$ and $\kappa_1$ are as in \eqref{eq: theta_kappa_primal_hjb} and the terminal conditions are as in \eqref{eq: terminal_conditions_pirmal_hjb}.
 
@@ -352,7 +352,7 @@ where $\vartheta_2$ and $\kappa_2$ are as in \eqref{eq: control_parameters_prima
 \subsection{Equivalence of Primal HJB and Primal BSDE}
 From the Primal HJB, we get
 \begin{equation}
-    \pi^\ast = \bigg[\sum_{i=1}^d D_i^T \alpha D_i - R\bigg]^{-1} \bigg(S x - B^T \alpha x - B^T \beta - \sum_{i=1}^d D_i^T \alpha C_i x\bigg)
+    \pi^\ast = \bigg[\sum_{i=1}^d D_i^T P D_i - R\bigg]^{-1} \bigg(S x - B^T P x - B^T M - \sum_{i=1}^d D_i^T P C_i x\bigg)
 \end{equation}
 and from the Primal BSDE:
 \begin{equation}
@@ -360,26 +360,26 @@ and from the Primal BSDE:
 \end{equation}
 Comparing, we get the relation
 \begin{equation*}
-    \varphi = \alpha, \quad \psi = \beta. 
+    \varphi = P, \quad \psi = M. 
 \end{equation*}
-The ODE from the Primal BSDE for $\varphi$ is \eqref{eq: primal_bsde_solution_1}. Substituting $\varphi = \alpha$ and $\vartheta_2 = \vartheta_1$ we get 
+The ODE from the Primal BSDE for $\varphi$ is \eqref{eq: primal_bsde_solution_1}. Substituting $\varphi = P$ and $\vartheta_2 = \vartheta_1$ we get 
 \begin{equation*}
-    \dot{\alpha} + \alpha A + A^T \alpha + \alpha B \vartheta_1 + \vartheta_1^T B^T \alpha + \sum_{i=1}^d (C_i^T + \vartheta_1^T D_i^T) \alpha (C_i + D_i \vartheta_1) - Q - S^T \vartheta_1 - \vartheta_1^T S - \vartheta_1^T R \vartheta_1  = 0,
+    \dot{P} + P A + A^T P + P B \vartheta_1 + \vartheta_1^T B^T P + \sum_{i=1}^d (C_i^T + \vartheta_1^T D_i^T) P (C_i + D_i \vartheta_1) - Q - S^T \vartheta_1 - \vartheta_1^T S - \vartheta_1^T R \vartheta_1  = 0,
 \end{equation*}
-which is equal to twice the ODE for $\alpha$ from the primal HJB \eqref{eq: primal_hjb_ricatti_1}, i.e. 
+which is equal to twice the ODE for $P$ from the primal HJB \eqref{eq: primal_hjb_ricatti_1}, i.e. 
 \begin{align*}
-    \frac12 \dot{\alpha} + \frac12 A^T \alpha + \frac12 \alpha A + \frac12 \vartheta_1^T B^T \alpha + \frac12 \alpha B \vartheta_1 + &\frac12 \sum_{i=1}^d (C_i^T + \vartheta_1^T D_i^T)\alpha(C_i + D_i \vartheta_1)\\
+    \frac12 \dot{P} + \frac12 A^T P + \frac12 P A + \frac12 \vartheta_1^T B^T P + \frac12 P B \vartheta_1 + &\frac12 \sum_{i=1}^d (C_i^T + \vartheta_1^T D_i^T)P(C_i + D_i \vartheta_1)\\
      -& \frac12 Q - \frac12 \vartheta_1^T S - \frac12 S^T \vartheta_1 - \frac12 \vartheta_1^T R \vartheta_1 = 0.
 \end{align*}
-Similarly, substituting $\varphi=\alpha, \psi = \beta$, $\vartheta_2 = \vartheta_1$ and $\kappa_2 = \kappa_1$ into \eqref{eq: primal_bsde_solution_2} we get
+Similarly, substituting $\varphi=P, \psi = M$, $\vartheta_2 = \vartheta_1$ and $\kappa_2 = \kappa_1$ into \eqref{eq: primal_bsde_solution_2} we get
 \begin{align*}
-    \dot{\beta} + \alpha B \kappa_1 + A^T \beta + \vartheta_1^T B^T \beta + \sum_{i=1}^d C_i^T \alpha D_i \kappa_1 + \sum_{i=1}^d \vartheta_1^T D_i^T \alpha D_i \kappa_1 - S^T \kappa_1 - \vartheta_1^T R \kappa_1 = 0
+    \dot{M} + P B \kappa_1 + A^T M + \vartheta_1^T B^T M + \sum_{i=1}^d C_i^T P D_i \kappa_1 + \sum_{i=1}^d \vartheta_1^T D_i^T P D_i \kappa_1 - S^T \kappa_1 - \vartheta_1^T R \kappa_1 = 0
 \end{align*}
 and we will get exactly \eqref{eq: primal_hjb_ricatti_2}:
 \begin{align*}
-    \dot{\beta} + A^T \beta + \alpha B \kappa_1 + \vartheta_1^T B^T \beta + \sum_{i=1}^d (C_i^T + \vartheta_1^T D_i^T&)\alpha D_i \kappa_1 -  S^T \kappa_1 - \vartheta_1^T R \kappa_1 = 0 
+    \dot{M} + A^T M + P B \kappa_1 + \vartheta_1^T B^T M + \sum_{i=1}^d (C_i^T + \vartheta_1^T D_i^T&)P D_i \kappa_1 -  S^T \kappa_1 - \vartheta_1^T R \kappa_1 = 0 
 \end{align*}
-So the ODEs for solving $\alpha, \beta$ and $\varphi, \psi$ are identical, hence we have equivalence between the two methods.
+So the ODEs for solving $P, M$ and $\varphi, \psi$ are identical, hence we have equivalence between the two methods.yop
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%   DUAL PROBLEM %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -397,15 +397,11 @@ where $\alpha, \beta_i$ and $y$ are all to be determined. There is a unique solu
 
 Using Ito's lemma to $X(t)^T Y(t)$, we get
 \begin{align*}
-    \d X^T Y &= (X^T \alpha + \pi^T \beta) \d t + \sum_{i=1}^d [X^T \beta_i + Y^T (C_i X + D_i \pi)] \d W_i,
+    \d X^T Y &= \bigg(X^T \alpha + \pi^T B^T Y + \pi^T \sum_{i=1}^d D_i^T \beta_i \bigg) \d t + \sum_{i=1}^d \bigg(X^T \beta_i + Y^T (C_i X + D_i \pi)\bigg) \d W_i,
 \end{align*}
-where
-\begin{equation*}
-    \beta = B^T Y + \sum_{i=1}^d D_i^T \beta_i.
-\end{equation*}
-The process $X^T(t)Y(t) - \int_{t_0}^t [X^T(s) \alpha(s) + \pi^T(s) \beta(s)] \d s$ is a local martingale and a supermartingale if it is bounded below by an integrable process, which gives 
+The process $X^T(t)Y(t) - \int_{t_0}^t [X^T(s) \alpha(s) + \pi^T(s) (B^T Y + \sum_{i=1}^d D_i^T \beta_i)] \d s$ is a local martingale and a supermartingale if it is bounded below by an integrable process, which gives 
 \begin{equation}
-    \E \bigg[ X^T(T) Y(T) - \int_{t_0}^T (X^T \alpha + \pi^T \beta) \d s \bigg] \le x_0^T y. \label{eq: dual_1}
+    \E \bigg[ X^T(T) Y(T) - \int_{t_0}^T \bigg(X^T \alpha + \pi^T B^T Y + \pi^T\sum_{i=1}^d D_i^T \beta_i) \bigg) \d s \bigg] \le x^T y. \label{eq: dual_1}
 \end{equation}
 The optimisation problem can be written equivalently as 
 \begin{equation}
@@ -506,6 +502,12 @@ Denoting
         S & R
     \end{bmatrix}^{-1},
 \end{equation*}
+where
+\begin{align}
+    &\tilde{Q} = Q^{-1} - Q^{-1} S^T (S Q^{-1} S^T - R)^{-1}S Q^{-1} \label{eq: tilde_q}\\
+    &\tilde{R} = R^{-1} - R^{-1} S (S^T R^{-1}S - Q^{-1})^{-1}S^T R^{-1} \label{eq: tilde_r}\\
+    &\tilde{S} = (S Q^{-1} S^T - R)^{-1}S Q^{-1} = R^{-1}S(S^TR^{-1}S - Q^{-1})^{-1} \label{eq: tilde_s}
+\end{align}
 we get
 \begin{equation}
     \phi(t, \alpha, \beta) = \frac12 \alpha^T \tilde{Q} \alpha + \alpha^T \tilde{S}^T \beta + \frac12 \beta^T \tilde{R} \beta \label{eq: phi}
@@ -522,19 +524,19 @@ Then $h(y)$ is given by
 \end{align*}
 Combining \eqref{eq: dual_1}, \eqref{eq: phi_1}, \eqref{eq: h_1}, we get the following inequality:
 \begin{equation*}
-    \max_\pi \E \bigg[ -\int_{t_0}^T f(t,x,\pi) \d t - g(X(T)) \bigg] \le \min_{y, \alpha, \beta_1, \dots, \beta_d} \bigg[ x_0^T y + \E\bigg[\int_{t_0}^T \phi(t,\alpha, \beta) \d t + h(Y(T)) \bigg] \bigg].
+    \max_\pi \E \bigg[ -\int_{t_0}^T f(t,x,\pi) \d t - g(X(T)) \bigg] \le \min_{y, \alpha, \beta_1, \dots, \beta_d} \bigg[ x^T y + \E\bigg[\int_{t_0}^T \phi\bigg(t,\alpha, B^T Y + \sum_{i=1}^d D_i^T \beta_i\bigg) \d t + h(Y(T)) \bigg] \bigg].
 \end{equation*}
 The dual control problem is defined by
 \begin{equation}
-    \min_{y, \alpha, \beta_1, \dots, \beta_d} \bigg[ x_0^T y + \E\bigg[\int_{t_0}^T \phi(t,\alpha, \beta) \d t + h(Y(T)) \bigg] \bigg], \label{eq: dual_control_problem}
+    \min_{y, \alpha, \beta_1, \dots, \beta_d} \bigg[ x^T y + \E\bigg[\int_{t_0}^T \phi\bigg(t,\alpha, B^T Y + \sum_{i=1}^d D_i^T \beta_i\bigg) \d t + h(Y(T)) \bigg] \bigg], \label{eq: dual_control_problem}
 \end{equation}
-where $Y$ satisfies \eqref{eq: y_sde} and $\beta = B^T Y + \sum_{i=1}^d D_i^T \beta_i$. Problem \eqref{eq: dual_control_problem} can be solved in two steps: first, for fixed $y$, solve a stochastic control problem
+where $Y$ satisfies \eqref{eq: y_sde}. Problem \eqref{eq: dual_control_problem} can be solved in two steps: first, for fixed $y$, solve a stochastic control problem
 \begin{equation*}
-    V(y) = \min_{ \alpha, \beta_1, \dots, \beta_d} \E\bigg[\int_{t_0}^T \phi \bigg(t, \alpha, B^T Y + \sum_{i=1}^d D_i^T \beta_i \bigg) \d t + h(Y(T)) \bigg],
+    -\tilde{v}(y) = \min_{ \alpha, \beta_1, \dots, \beta_d} \E\bigg[\int_{t_0}^T \phi \bigg(t, \alpha, B^T Y + \sum_{i=1}^d D_i^T \beta_i \bigg) \d t + h(Y(T)) \bigg],
 \end{equation*}
 and second, solve a static optimisation problem
 \begin{equation}
-    \min_y (x_0^T y + V(y)).
+    \min_y (x^T y - \tilde{v}(y)).
 \end{equation}
 \subsection{Dual Hamilton-Jacobi-Bellman Equation}
 \subsubsection{Deriving the Dual HJB}
@@ -556,100 +558,123 @@ The generator is given by
 \end{equation}
 To find the supremum, we set the derivatives with respect to $\alpha, \beta_1, \dots, \beta_d$ to zero. We have
 \begin{align}
-    D_\alpha [\mathcal{L}^{\alpha, \beta_i}[\tilde{v}(t,y)] - \phi(t, \alpha, \beta)] &= D_y[\tilde{v}] - \tilde{Q}\alpha - \tilde{S}^T \beta = 0\\
-    D_{\beta_i} [\mathcal{L}^{\alpha, \beta_i}[\tilde{v}(t,y)] - \phi(t, \alpha, \beta)] &= - C_i D_y[\tilde{v}] + D_y^2[\tilde{v}] \beta_i - D_i (\tilde{S}\alpha + \tilde{R}\beta) = 0
+    &D_\alpha \big[\mathcal{L}^{\alpha, \beta_i}[\tilde{v}(t,y)] - \phi\big] = D_y[\tilde{v}] - \tilde{Q}\alpha - \tilde{S}^T (B^T y + \sum_{i=1}^d D_i^T \beta_i) = 0 \label{eq: dual_sys1}\\
+    &D_{\beta_i}\big[\mathcal{L}^{\alpha, \beta_i}[\tilde{v}(t,y)] - \phi\big] = - C_i D_y[\tilde{v}] + D_y^2[\tilde{v}] \beta_i
+    - D_i (\tilde{S}\alpha + \tilde{R}(B^T y + \sum_{i=1}^d D_i^T \beta_i)) = 0 \label{eq: dual_sys2}
 \end{align}
-From the first equation, we get 
-\begin{equation*}
-    \beta = \tilde{S}^\dagger (D_y[\tilde{v}] - \tilde{Q} \alpha),
-\end{equation*}
-where $\tilde{S}^\dagger = (\tilde{S}\tilde{S}^T)^{-1} \tilde{S}$ is the Moore-Penrose inverse of $\tilde{S}^T$. From the second equation, we get
-\begin{align*}
-    \beta_i = (D_y^2[\tilde{v}])^{-1} \bigg[ (C_i + D_i \tilde{R}\tilde{S}^\dagger) D_y[\tilde{v}] + (D_i \tilde{S} - D_i \tilde{R}\tilde{S}^\dagger \tilde{Q})\alpha \bigg]
-\end{align*}
-Substituting into the first equation
-\begin{align*}
-    \tilde{Q} \alpha 
-    &= D_y[\tilde{v}] - \tilde{S}^T \beta\\
-    &= D_y[\tilde{v}] - \tilde{S}^T B^T Y - \tilde{S}^T \sum_{i=1}^d D_i^T \beta_i\\
-    &= D_y[\tilde{v}] - \tilde{S}^T B^T Y - \tilde{S}^T \sum_{i=1}^d D_i^T (D_y^2[\tilde{v}])^{-1} \bigg[ (C_i + D_i \tilde{R}\tilde{S}^\dagger) D_y[\tilde{v}] + (D_i \tilde{S} - D_i \tilde{R}\tilde{S}^\dagger \tilde{Q})\alpha \bigg]
-\end{align*}
-Rearranging we get
-\begin{equation}
-    \bigg(\tilde{Q} + \tilde{S}^T \sum_{i=1}^d D_i^T (D_y^2[\tilde{v}])^{-1} (D_i \tilde{S} - D_i\tilde{R}\tilde{S}^\dagger \tilde{Q}) \bigg)\alpha = D_y[\tilde{v}] - \tilde{S}^T B^T Y -\tilde{S}^T \sum_{i=1}^d D_i^T (D_y^2[\tilde{v}])^{-1} \big(D_i \tilde{R}\tilde{S}^\dagger + C_i\big) D_y[\tilde{v}] 
-\end{equation}
-so
-\begin{equation}
-    \alpha^\ast = \bigg[\tilde{Q} + \tilde{S}^T \sum_{i=1}^d D_i^T (D_y^2[\tilde{v}])^{-1} (D_i \tilde{S} - D_i\tilde{R}\tilde{S}^\dagger \tilde{Q}) \bigg]^{-1} \bigg[D_y[\tilde{v}] - \tilde{S}^T B^T Y -\tilde{S}^T \sum_{i=1}^d D_i^T (D_y^2[\tilde{v}])^{-1} \big(D_i \tilde{R}\tilde{S}^\dagger + C_i\big) D_y[\tilde{v}]  \bigg] \label{eq: dual_alpha1}
-\end{equation}
-and the optimal $\beta_i$ are
-\begin{equation}
-    \beta_i^\ast = (D_y^2[\tilde{v}])^{-1} \bigg[ (C_i + D_i \tilde{R}\tilde{S}^\dagger) D_y[\tilde{v}] + (D_i \tilde{S} - D_i \tilde{R}\tilde{S}^\dagger \tilde{Q})\alpha^\ast \bigg] \label{eq: dual_beta1}
-\end{equation}
+Solving this system, we can get the optimal controls, which we denote by $\alpha^\ast, \beta_i^\ast$.
+%From the first equation, we get 
+%\begin{equation*}
+%    \beta = \tilde{S}^\dagger (D_y[\tilde{v}] - \tilde{Q} \alpha),
+%\end{equation*}
+%where $\tilde{S}^\dagger = (\tilde{S}\tilde{S}^T)^{-1} \tilde{S}$ is the Moore-Penrose inverse of $\tilde{S}^T$. From the second equation, we get
+%\begin{align*}
+%    \beta_i = (D_y^2[\tilde{v}])^{-1} \bigg[ (C_i + D_i \tilde{R}\tilde{S}^\dagger) D_y[\tilde{v}] + (D_i \tilde{S} - D_i \tilde{R}\tilde{S}^\dagger \tilde{Q})\alpha \bigg]
+%\end{align*}
+%Substituting into the first equation
+%\begin{align*}
+%    \tilde{Q} \alpha 
+%    &= D_y[\tilde{v}] - \tilde{S}^T \beta\\
+%    &= D_y[\tilde{v}] - \tilde{S}^T B^T Y - \tilde{S}^T \sum_{i=1}^d D_i^T \beta_i\\
+%    &= D_y[\tilde{v}] - \tilde{S}^T B^T Y - \tilde{S}^T \sum_{i=1}^d D_i^T (D_y^2[\tilde{v}])^{-1} \bigg[ (C_i + D_i \tilde{R}\tilde{S}^\dagger) D_y[\tilde{v}] + (D_i \tilde{S} - D_i \tilde{R}\tilde{S}^\dagger \tilde{Q})\alpha \bigg]
+%\end{align*}
+%Rearranging we get
+%\begin{equation}
+%    \bigg(\tilde{Q} + \tilde{S}^T \sum_{i=1}^d D_i^T (D_y^2[\tilde{v}])^{-1} (D_i \tilde{S} - D_i\tilde{R}\tilde{S}^\dagger \tilde{Q}) \bigg)\alpha = D_y[\tilde{v}] - \tilde{S}^T B^T Y -\tilde{S}^T \sum_{i=1}^d D_i^T (D_y^2[\tilde{v}])^{-1} \big(D_i \tilde{R}\tilde{S}^\dagger + C_i\big) D_y[\tilde{v}] 
+%\end{equation}
+%so
+%\begin{equation}
+%    \alpha^\ast = \bigg[\tilde{Q} + \tilde{S}^T \sum_{i=1}^d D_i^T (D_y^2[\tilde{v}])^{-1} (D_i \tilde{S} - D_i\tilde{R}\tilde{S}^\dagger \tilde{Q}) \bigg]^{-1} \bigg[D_y[\tilde{v}] - \tilde{S}^T B^T Y -\tilde{S}^T \sum_{i=1}^d D_i^T (D_y^2[\tilde{v}])^{-1} \big(D_i \tilde{R}\tilde{S}^\dagger + C_i\big) D_y[\tilde{v}]  \bigg] \label{eq: dual_alpha1}
+%\end{equation}
+%and the optimal $\beta_i$ are
+%\begin{equation}
+%    \beta_i^\ast = (D_y^2[\tilde{v}])^{-1} \bigg[ (C_i + D_i \tilde{R}\tilde{S}^\dagger) D_y[\tilde{v}] + (D_i \tilde{S} - D_i \tilde{R}\tilde{S}^\dagger \tilde{Q})\alpha^\ast \bigg] \label{eq: dual_beta1}
+%\end{equation}
 The HJB equation then becomes
 \begin{equation}
     \frac{\partial \tilde{v}}{\partial t} + \bigg({\alpha^\ast}^T - Y^T A - \sum_{i=1}^d {\beta_i^\ast}^T C_i\bigg)D_y[\tilde{v}] + \frac12 \sum_{i=1}^d {\beta_i^\ast}^T D_y^2[\tilde{v}] {\beta_i^\ast} - \phi\bigg(t, \alpha^\ast, B^T y + \sum_{i=1}^d D_i^T \beta_i^\ast \bigg) \label{eq: dual_hjb}
 \end{equation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%% SOLVING DUAL HJB%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \subsubsection{Solving the Dual HJB}
 Suppose that $\tilde{v}$ is a quadratic function in $y$ and use the ansatz
 \begin{equation}
-    \tilde{v}(t,y) = \frac12 y^T a(t) y + y^T b(t) + c(t),
+    \tilde{v}(t,y) = \frac12 y^T \tilde{P}(t) y + y^T \tilde{M}(t) + \tilde{N}(t),
 \end{equation}
 with terminal conditions
 \begin{equation}
-    a(T) = -G^{-1}(T), \quad b(T) = - G^{-1}(T)L(T), \quad c(T) = \frac12 L^T(T)G^{-1}(T)L(T). \label{eq: dual_terminal_conditions}
+    \tilde{P}(T) = -G^{-1}(T), \quad \tilde{M}(T) = - G^{-1}(T)L(T), \quad \tilde{N}(T) = \frac12 L^T(T)G^{-1}(T)L(T). \label{eq: dual_terminal_conditions}
 \end{equation}
 Then
 \begin{align*}
-    &\frac{\partial \tilde{v}}{\partial t}(t, y) = \frac12 y^T \dot{a}(t) y + y^T \dot{b}(t) + \dot{c}(t)\\
-    &D_y[\tilde{v(t,y)}] = a(t) y + b(t)\\
-    &D_y^2[\tilde{v(t,y)}] = a(t)
+    &\frac{\partial \tilde{v}}{\partial t}(t, y) = \frac12 y^T \frac{\d \tilde{P}}{\d t}(t) y + y^T \dot{\tilde{M}}(t) + \dot{\tilde{N}}(t)\\
+    &D_y[\tilde{v(t,y)}] = \tilde{P}(t) y + \tilde{M}(t)\\
+    &D_y^2[\tilde{v(t,y)}] = \tilde{P}(t)
 \end{align*}
-Substituting this into the controls \eqref{eq: dual_alpha1} and \eqref{eq: dual_beta1}, we get
-\begin{align}
-    &\alpha^\ast = \bigg[\tilde{Q} + \tilde{S}^T \sum_{i=1}^d D_i^T a^{-1} (D_i \tilde{S} - D_i\tilde{R}\tilde{S}^\dagger \tilde{Q}) \bigg]^{-1} \bigg[ay+b - \tilde{S}^T B^T Y -\tilde{S}^T \sum_{i=1}^d D_i^T a^{-1} \big(D_i \tilde{R}\tilde{S}^\dagger + C_i\big) (ay+b)\bigg]\\
-    &\beta_i^\ast = a^{-1} \bigg[ (C_i + D_i \tilde{R}\tilde{S}^\dagger) (ay+b)+ (D_i \tilde{S} - D_i \tilde{R}\tilde{S}^\dagger \tilde{Q})\alpha^\ast \bigg]
-\end{align}
-We denote by $\theta$ and $\kappa$ the coefficients before $y$ and the free coefficient in $\alpha^\ast$ and similarly for $\beta_i$, i.e. 
+%Substituting this into the controls \eqref{eq: dual_alpha1} and \eqref{eq: dual_beta1}, we get
+%\begin{align}
+%    &\alpha^\ast = \bigg[\tilde{Q} + \tilde{S}^T \sum_{i=1}^d D_i^T \tilde{P}^{-1} (D_i \tilde{S} - D_i\tilde{R}\tilde{S}^\dagger \tilde{Q}) \bigg]^{-1} \bigg[\tilde{P}y+b - \tilde{S}^T B^T Y -\tilde{S}^T \sum_{i=1}^d D_i^T \tilde{P}^{-1} \big(D_i \tilde{R}\tilde{S}^\dagger + C_i\big) (\tilde{P}y+b)\bigg]\\
+%    &\beta_i^\ast = \tilde{P}^{-1} \bigg[ (C_i + D_i \tilde{R}\tilde{S}^\dagger) (\tilde{P}y+b)+ (D_i \tilde{S} - D_i \tilde{R}\tilde{S}^\dagger \tilde{Q})\alpha^\ast \bigg]
+%\end{align}
+The system of equations \eqref{eq: dual_sys1} and \eqref{eq: dual_sys2} from which we derive the optimal controls $\alpha^\ast$ and $\beta_i^\ast$ is now given by 
+\begin{align*}
+    &\tilde{P}y + \tilde{M} - \tilde{Q}\alpha - \tilde{S}^T (B^T Y + \sum_{i=1}^d D_i^T \beta_i) = 0\\
+    &C_i (\tilde{P}y + \tilde{M}) - \tilde{P} \beta_i
+    + D_i (\tilde{S}\alpha + \tilde{R}(B^T Y + \sum_{i=1}^d D_i^T \beta_i)) = 0
+\end{align*}
+Clearly, the solutions for $\alpha^\ast$ and $\beta^\ast$ are linear in $y$, hence we denote by $\tilde{\theta}$ and $\tilde{\kappa}$ the coefficients before $y$ and the free coefficient in $\alpha^\ast$ and similarly for $\beta_i$, i.e. 
 \begin{equation}
-    \alpha^\ast = \theta y + \kappa, \quad \beta_i = \theta_i y + \kappa_i. \label{eq: dual_coeffs}
+    \alpha^\ast = \tilde{\theta} y + \tilde{\kappa}, \quad \beta_i = \tilde{\theta}_i y + \tilde{\kappa}_i. \label{eq: dual_coeffs}
 \end{equation}
 Substituting this into the HJB equation \eqref{eq: dual_hjb} we get 
 \begin{align}
-     \frac12 y^T \dot{a}(t) y + y^T \dot{b}(t) + \dot{c}(t) + \bigg(y^T \theta^T + \kappa^T - y^T A - \sum_{i=1}^d (y^T \theta_i^T + \kappa_i^T) C_i\bigg)(ay+b)\\
-     + \frac12 \sum_{i=1}^d (y^T\theta_i^T + \kappa_i^T) a (\theta_i y + \kappa_i) - \phi\bigg(t, \theta y + \kappa, B^T y + \sum_{i=1}^d D_i^T (\theta_i y + \kappa_i) \bigg) = 0
+     \frac12 y^T \frac{\d \tilde{P}}{\d t} y + y^T \dot{\tilde{M}} + \dot{\tilde{N}} + \bigg(y^T \tilde{\theta}^T + \tilde{\kappa}^T - y^T A - \sum_{i=1}^d (y^T \tilde{\theta}_i^T + \tilde{\kappa}_i^T) C_i\bigg)(\tilde{P}y+\tilde{M})\\
+     + \frac12 \sum_{i=1}^d (y^T\tilde{\theta}_i^T + \tilde{\kappa}_i^T) \tilde{P} (\tilde{\theta}_i y + \tilde{\kappa}_i) - \phi\bigg(t, \tilde{\theta} y + \tilde{\kappa}, B^T y + \sum_{i=1}^d D_i^T (\tilde{\theta}_i y + \tilde{\kappa}_i) \bigg) = 0
 \end{align}
-Expanding $\phi\bigg(t, \theta y + \kappa, B^T y + \sum_{i=1}^d D_i^T (\theta_i y + \kappa_i) \bigg) $ we get
+Expanding $\phi\bigg(t, \tilde{\theta} y + \tilde{\kappa}, B^T y + \sum_{i=1}^d D_i^T (\tilde{\theta}_i y + \tilde{\kappa}_i) \bigg) $ we get
 \begin{align*}
-    \phi\bigg(t, \theta y + \kappa, B^T y + \sum_{i=1}^d D_i^T (\theta_i y + \kappa_i) \bigg) 
-    = \frac12 (\theta y + \kappa)^T \tilde{Q}(\theta y + \kappa)+ (\theta y + \kappa)^T \tilde{S}^T \big(B^T y + \sum_{i=1}^d D_i^T (\theta_i y + \kappa_i)\big)\\
-    + \frac12\big(B^T y + \sum_{i=1}^d D_i^T (\theta_i y + \kappa_i)\big)^T \tilde{R}(B^T y + \sum_{i=1}^d D_i^T (\theta_i y + \kappa_i))
+    \phi\bigg(t, \tilde{\theta} y + \tilde{\kappa}, B^T y + \sum_{i=1}^d D_i^T (\tilde{\theta}_i y + \tilde{\kappa}_i) \bigg) 
+    = \frac12 (\tilde{\theta} y + \tilde{\kappa})^T \tilde{Q}(\tilde{\theta} y + \tilde{\kappa})+ (\tilde{\theta} y + \tilde{\kappa})^T \tilde{S}^T \big(B^T y + \sum_{i=1}^d D_i^T (\tilde{\theta}_i y + \tilde{\kappa}_i)\big)\\
+    + \frac12\big(B^T y + \sum_{i=1}^d D_i^T (\tilde{\theta}_i y + \tilde{\kappa}_i)\big)^T \tilde{R}(B^T y + \sum_{i=1}^d D_i^T (\tilde{\theta}_i y + \tilde{\kappa}_i))
 \end{align*}
 Rearranging, we get 
 \begin{align*}
-     \frac12 y^T \dot{a}(t) y + y^T \dot{b}(t) + \dot{c}(t) + y^T\theta^T a y + y^T a \kappa - y^T A a y - y^T \sum_{i=1}^d \theta_i^T C_i a y - y^T a \sum_{i=1}^d C_i^T \kappa_i\\
-     + y^T \theta^T b + \kappa^T b - y^T A b - \sum_{i=1}^d y^T \theta_i^T C_i b - \sum_{i=1}^d \kappa_i^T C_i b + \frac12 y^T \sum_{i=1}^d\theta_i^T a \theta_i y + y^T \sum_{i=1}^d\theta_i a \kappa_i + \frac12 \sum_{i=1}^d\kappa_i^T a \kappa_i\\
-     - \frac12 y^T \theta^T \tilde{Q}\theta y - y^T \theta^T \tilde{Q}\kappa - \frac12 \kappa^T \tilde{Q}\kappa - y^T \theta^T \tilde{S}^T (B^T + \sum_{i=1}^d D_i^T \theta_i)y - y^T \theta^T \tilde{S}^T\sum_{i=1}^d D_i^T \kappa_i\\
-     - y^T(B + \sum_{i=1}^d \theta_i^T D_i)\tilde{S}\kappa - \kappa^T \tilde{S}^T \sum_{i=1}^d D_i^T \kappa_i -\frac12 y^T\bigg(B + \sum_{i=1}^d\theta_i^T D_i\bigg) \tilde{R} \bigg(B^T + \sum_{i=1}^d D_i^T \theta_i\bigg)y\\
-     - y^T\bigg(B + \sum_{i=1}^d\theta_i^T D_i\bigg) \tilde{R} \sum_{i=1}^d D_i^T \kappa_i - \frac12 \bigg(\sum_{i=1}^d\kappa_i^T D_i\bigg) \tilde{R} \bigg(\sum_{i=1}^d D_i^T \kappa_i\bigg) = 0
+     \frac12 y^T \frac{\d \tilde{P}}{\d t} y + y^T \frac{\d \tilde{M}}{\d t} + \frac{\d \tilde{N}}{\d t} + y^T\tilde{\theta}^T \tilde{P} y + y^T \tilde{P} \tilde{\kappa} - y^T A \tilde{P} y - y^T \sum_{i=1}^d \tilde{\theta}_i^T C_i \tilde{P} y - y^T \tilde{P} \sum_{i=1}^d C_i^T \tilde{\kappa}_i\\
+     + y^T \tilde{\theta}^T \tilde{M}+ \tilde{\kappa}^T \tilde{M}- y^T A \tilde{M}- \sum_{i=1}^d y^T \tilde{\theta}_i^T C_i \tilde{M}- \sum_{i=1}^d \tilde{\kappa}_i^T C_i \tilde{M}+ \frac12 y^T \sum_{i=1}^d\tilde{\theta}_i^T \tilde{P} \tilde{\theta}_i y + y^T \sum_{i=1}^d\tilde{\theta}_i \tilde{P} \tilde{\kappa}_i + \frac12 \sum_{i=1}^d\tilde{\kappa}_i^T \tilde{P} \tilde{\kappa}_i\\
+     - \frac12 y^T \tilde{\theta}^T \tilde{Q}\tilde{\theta} y - y^T \tilde{\theta}^T \tilde{Q}\tilde{\kappa} - \frac12 \tilde{\kappa}^T \tilde{Q}\tilde{\kappa} - y^T \tilde{\theta}^T \tilde{S}^T (B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i)y - y^T \tilde{\theta}^T \tilde{S}^T\sum_{i=1}^d D_i^T \tilde{\kappa}_i\\
+     - y^T(B + \sum_{i=1}^d \tilde{\theta}_i^T D_i)\tilde{S}\tilde{\kappa} - \tilde{\kappa}^T \tilde{S}^T \sum_{i=1}^d D_i^T \tilde{\kappa}_i -\frac12 y^T\bigg(B + \sum_{i=1}^d\tilde{\theta}_i^T D_i\bigg) \tilde{R} \bigg(B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i\bigg)y\\
+     - y^T\bigg(B + \sum_{i=1}^d\tilde{\theta}_i^T D_i\bigg) \tilde{R} \sum_{i=1}^d D_i^T \tilde{\kappa}_i - \frac12 \bigg(\sum_{i=1}^d\tilde{\kappa}_i^T D_i\bigg) \tilde{R} \bigg(\sum_{i=1}^d D_i^T \tilde{\kappa}_i\bigg) = 0
 \end{align*}
 Grouping together the coefficients in front of $y$ we get:
 \begin{align*}
-    &y^T \bigg[ \frac12 \dot{a} + \theta^T a - A a  - \sum_{i=1}^d \theta_i^T C_i a + \frac12 \sum_{i=1}^d \theta_i^T a \theta_i - \frac12 \theta^T \tilde{Q}\theta - \theta^T \tilde{S}^T \big(B^T + \sum_{i=1}^d D_i^T \theta_i \big)\\
-    &- \frac12 \bigg(B + \sum_{i=1}^d\theta_i^T D_i\bigg) \tilde{R} \bigg(B^T + \sum_{i=1}^d D_i^T \theta_i\bigg) \bigg]y + y^T \bigg[ \dot{b} + a \kappa - a \sum_{i=1}^d C_i^T \kappa_i + \theta^T b - Ab - \sum_{i=1}^d \theta_i^T C_i b\\
-    &+ \sum_{i=1}^d\theta_i a \kappa_i - \theta^T \tilde{Q} \kappa - \theta^T \tilde{S}^T \sum_{i=1}^d D_i^T \kappa_i - \big(B + \sum_{i=1}^d\theta_i^T D_i \big)\tilde{S}\kappa - \big( B + \sum_{i=1}^d \theta_i^T D_i \big) \tilde{R} \sum_{i=1}^dD_i^T \kappa_i  \bigg]\\
-    &+ \dot{c} + \kappa^T b - \sum_{i=1}^d\kappa_i^T C_i b + \frac12 \sum_{i=1}^d\kappa_i^T a \kappa_i - \frac12 \kappa^T \tilde{Q}\kappa - \kappa^T \tilde{S}^T \sum_{i=1}^d D_i^T\kappa_i - \frac12 \bigg(\sum_{i=1}^d\kappa_i^T D_i\bigg) \tilde{R} \bigg(\sum_{i=1}^d D_i^T \kappa_i\bigg) = 0
+    &y^T \bigg[ \frac12 \frac{\d \tilde{P}}{\d t} + \tilde{\theta}^T \tilde{P} - A \tilde{P}  - \sum_{i=1}^d \tilde{\theta}_i^T C_i \tilde{P} + \frac12 \sum_{i=1}^d \tilde{\theta}_i^T \tilde{P} \tilde{\theta}_i - \frac12 \tilde{\theta}^T \tilde{Q}\tilde{\theta} - \tilde{\theta}^T \tilde{S}^T \big(B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i \big)\\
+    &- \frac12 \bigg(B + \sum_{i=1}^d\tilde{\theta}_i^T D_i\bigg) \tilde{R} \bigg(B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i\bigg) \bigg]y + y^T \bigg[ \frac{\d \tilde{M}}{\d t} + \tilde{P} \tilde{\kappa} - \tilde{P} \sum_{i=1}^d C_i^T \tilde{\kappa}_i + \tilde{\theta}^T \tilde{M} - A\tilde{M} - \sum_{i=1}^d \tilde{\theta}_i^T C_i \tilde{M}\\
+    &+ \sum_{i=1}^d\tilde{\theta}_i \tilde{P} \tilde{\kappa}_i - \tilde{\theta}^T \tilde{Q} \tilde{\kappa} - \tilde{\theta}^T \tilde{S}^T \sum_{i=1}^d D_i^T \tilde{\kappa}_i - \big(B + \sum_{i=1}^d\tilde{\theta}_i^T D_i \big)\tilde{S}\tilde{\kappa} - \big( B + \sum_{i=1}^d \tilde{\theta}_i^T D_i \big) \tilde{R} \sum_{i=1}^dD_i^T \tilde{\kappa}_i  \bigg]\\
+    &+ \frac{\d \tilde{N}}{\d t} + \tilde{\kappa}^T \tilde{M} - \sum_{i=1}^d\tilde{\kappa}_i^T C_i \tilde{M} + \frac12 \sum_{i=1}^d\tilde{\kappa}_i^T \tilde{P} \tilde{\kappa}_i - \frac12 \tilde{\kappa}^T \tilde{Q}\tilde{\kappa} - \tilde{\kappa}^T \tilde{S}^T \sum_{i=1}^d D_i^T\tilde{\kappa}_i - \frac12 \bigg(\sum_{i=1}^d\tilde{\kappa}_i^T D_i\bigg) \tilde{R} \bigg(\sum_{i=1}^d D_i^T \tilde{\kappa}_i\bigg) = 0
 \end{align*}
 This equation must equal zero for all $y$, hence the coefficients in front of the quadratic term, as well as $y^T$ and the free coefficient must be zero. Setting the coefficients to zero, we get the system
 \begin{align*}
-    \frac12 \dot{a} + \theta^T a - A a  - \sum_{i=1}^d \theta_i^T C_i a + \frac12 \sum_{i=1}^d \theta_i^T a \theta_i - \frac12 \theta^T \tilde{Q}\theta - \theta^T \tilde{S}^T \big(B^T + \sum_{i=1}^d D_i^T \theta_i \big)\\
-    - \frac12 \bigg(B + \sum_{i=1}^d\theta_i^T D_i\bigg) \tilde{R} \bigg(B^T + \sum_{i=1}^d D_i^T \theta_i\bigg) = 0 \numberthis \label{eq: dual_hjb_sol1}\\
-    \dot{b} + a \kappa - a \sum_{i=1}^d C_i^T \kappa_i + \theta^T b - Ab - \sum_{i=1}^d \theta_i^T C_i b 
-    + \sum_{i=1}^d\theta_i a \kappa_i - \theta^T \tilde{Q} \kappa - \theta^T \tilde{S}^T \sum_{i=1}^d D_i^T \kappa_i\\
-    - \big(B + \sum_{i=1}^d\theta_i^T D_i \big)\tilde{S}\kappa - \big( B + \sum_{i=1}^d \theta_i^T D_i \big) \tilde{R} \sum_{i=1}^dD_i^T \kappa_i = 0 \numberthis \label{eq: dual_hjb_sol2}\\
-    \dot{c} + \kappa^T b - \sum_{i=1}^d\kappa_i^T C_i b + \frac12 \sum_{i=1}^d\kappa_i^T a \kappa_i - \frac12 \kappa^T \tilde{Q}\kappa - \kappa^T \tilde{S}^T \sum_{i=1}^d D_i^T\kappa_i - \frac12 \bigg(\sum_{i=1}^d\kappa_i^T D_i\bigg) \tilde{R} \bigg(\sum_{i=1}^d D_i^T \kappa_i\bigg) = 0
+    \frac12 \frac{\d \tilde{P}}{\d t} + \tilde{\theta}^T \tilde{P} - A \tilde{P}  - \sum_{i=1}^d \tilde{\theta}_i^T C_i \tilde{P} + \frac12 \sum_{i=1}^d \tilde{\theta}_i^T \tilde{P} \tilde{\theta}_i - \frac12 \tilde{\theta}^T \tilde{Q}\tilde{\theta} - \tilde{\theta}^T \tilde{S}^T \big(B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i \big)\\
+    - \frac12 \bigg(B + \sum_{i=1}^d\tilde{\theta}_i^T D_i\bigg) \tilde{R} \bigg(B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i\bigg) = 0 \numberthis \label{eq: dual_hjb_sol1}\\
+    \frac{\d \tilde{M}}{\d t} + \tilde{P} \tilde{\kappa} - \tilde{P} \sum_{i=1}^d C_i^T \tilde{\kappa}_i + \tilde{\theta}^T \tilde{M} - A\tilde{M} - \sum_{i=1}^d \tilde{\theta}_i^T C_i \tilde{M} 
+    + \sum_{i=1}^d\tilde{\theta}_i a \tilde{\kappa}_i - \tilde{\theta}^T \tilde{Q} \tilde{\kappa} - \tilde{\theta}^T \tilde{S}^T \sum_{i=1}^d D_i^T \tilde{\kappa}_i\\
+    - \big(B + \sum_{i=1}^d\tilde{\theta}_i^T D_i \big)\tilde{S}\tilde{\kappa} - \big( B + \sum_{i=1}^d \tilde{\theta}_i^T D_i \big) \tilde{R} \sum_{i=1}^dD_i^T \tilde{\kappa}_i = 0 \numberthis \label{eq: dual_hjb_sol2}\\
+    \frac{\d \tilde{N}}{\d t} + \tilde{\kappa}^T \tilde{M} - \sum_{i=1}^d\tilde{\kappa}_i^T C_i \tilde{M} + \frac12 \sum_{i=1}^d\tilde{\kappa}_i^T \tilde{P} \tilde{\kappa}_i - \frac12 \tilde{\kappa}^T \tilde{Q}\tilde{\kappa} - \tilde{\kappa}^T \tilde{S}^T \sum_{i=1}^d D_i^T\tilde{\kappa}_i\\
+    - \frac12 \bigg(\sum_{i=1}^d\tilde{\kappa}_i^T D_i\bigg) \tilde{R} \bigg(\sum_{i=1}^d D_i^T \tilde{\kappa}_i\bigg) = 0
 \end{align*}
-where $\theta, \kappa, \theta_i$ and $\kappa_i$ are as in \eqref{eq: dual_coeffs} and the terminal conditions are given in \eqref{eq: dual_terminal_conditions}.
+where $\tilde{\theta}, \tilde{\kappa}, \tilde{\theta}_i$ and $\tilde{\kappa}_i$ satisfy
+\begin{align*}
+    &\tilde{P}y + \tilde{M} - \tilde{Q}(\tilde{\theta}y + \tilde{\kappa}) - \tilde{S}^T (B^T Y + \sum_{i=1}^d D_i^T (\tilde{\theta}_i y + \tilde{\kappa}_i)) = 0\\
+    &C_i (\tilde{P}y + \tilde{M}) - \tilde{P} (\tilde{\theta}_i y + \tilde{\kappa}_i)
+    + D_i \tilde{S}(\tilde{\theta}y + \tilde{\kappa}) + D_i\tilde{R}\bigg(B^T Y + \sum_{i=1}^d D_i^T (\tilde{\theta}_i y + \tilde{\kappa}_i)\bigg) = 0
+\end{align*}
+with terminal conditions
+\begin{equation}
+    \tilde{P}(T) = -G^{-1}(T), \quad \tilde{M}(T) = - G^{-1}(T)L(T), \quad \tilde{N}(T) = \frac12 L^T(T)G^{-1}(T)L(T). 
+\end{equation}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% DUAL BSDE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
@@ -678,22 +703,22 @@ The dual optimal control $(\hat{\alpha}, \hat{\beta_1}, \dots, \hat{\beta_d})$ o
 \end{equation}
 Since we have no constraints on the control, we find the maximum by setting $D_\alpha [\tilde{\mathcal{H}}] = 0$ and $D_{\beta_i} [\tilde{\mathcal{H}}] = 0$ for all $i = 1,\dots, d$, so
 \begin{align}
-    &D_\alpha[\tilde{\mathcal{H}}] = p_2 - \tilde{Q}\alpha - \tilde{S}^T \beta = 0  \label{eq: dual_hamiltonian_condition1}\\
-    &D_{\beta_i}[\tilde{\mathcal{H}}] = q_{2,i} - C_i p_2 - D_i \tilde{S}\alpha - D_i \tilde{R}\beta = 0 \label{eq: dual_hamiltonian_condition2}
+    &D_\alpha[\tilde{\mathcal{H}}] = p_2 - \tilde{Q}\alpha - \tilde{S}^T \bigg(B^T Y + \sum_{i=1}D_i^T \beta_i \bigg) = 0  \label{eq: dual_hamiltonian_condition1}\\
+    &D_{\beta_i}[\tilde{\mathcal{H}}] = q_{2,i} - C_i p_2 - D_i \tilde{S}\alpha - D_i \tilde{R}\bigg(B^T Y + \sum_{i=1}D_i^T \beta_i \bigg) = 0 \label{eq: dual_hamiltonian_condition2}
 \end{align}
 which we call the dual Hamiltonian condition. We try an ansatz for the control of the form
 \begin{align*}
-    \alpha = \theta Y + \kappa, \quad \beta_i = \theta_i Y + \kappa_i, \quad i \in \{1,\dots,d\}
+    \alpha = \tilde{\theta} Y + \tilde{\kappa}, \quad \beta_i = \tilde{\theta}_i Y + \tilde{\kappa}_i, \quad i \in \{1,\dots,d\}
 \end{align*}
 Substituting into the Hamiltonian \eqref{eq: dual_hamiltonian} we get
 \begin{align*}
-    \tilde{\mathcal{H}} = p_2^T(\theta Y + \kappa) - p_2^T A^T Y - p_2^T\sum_{i=1}^d C_i^T(\theta_i Y + \kappa_i)   + \sum_{i=1}^d (Y^T \theta_i^T + \kappa_i^T) q_{2,i}\\
-    - \phi \bigg(t, \theta Y + \kappa, B^T Y + \sum_{i=1}^d D_i^T(\theta_i Y + \kappa_i)\bigg)
+    \tilde{\mathcal{H}} = p_2^T(\tilde{\theta} Y + \tilde{\kappa}) - p_2^T A^T Y - p_2^T\sum_{i=1}^d C_i^T(\tilde{\theta}_i Y + \tilde{\kappa}_i)   + \sum_{i=1}^d (Y^T \tilde{\theta}_i^T + \tilde{\kappa}_i^T) q_{2,i}\\
+    - \phi \bigg(t, \tilde{\theta} Y + \tilde{\kappa}, B^T Y + \sum_{i=1}^d D_i^T(\tilde{\theta}_i Y + \tilde{\kappa}_i)\bigg)
 \end{align*}
 The derivative of the dual Hamiltonian is then
 \begin{align*}
-    D_y[\tilde{\mathcal{H}}] = \theta^T p_2 - A p_2 - \sum_{i=1}^d \theta_i^T C_i p_2  + \sum_{i=1}^d \theta_i^T q_{2,i} - \theta^T \tilde{Q}\theta Y- \theta^T \tilde{Q} \kappa - 2 \theta^T \tilde{S}\bigg(B^T + \sum_{i=1}^d D_i^T \theta_i\bigg) Y\\
-    - \theta^T \tilde{S}^T \sum_{i=1}^d D_i^T \kappa_i - \bigg( B + \sum_{i=1}^d \theta_i^T D_i \bigg) \tilde{S} \kappa - \bigg(B + \sum_{i=1}^d \theta_i^T D_i \bigg) \tilde{R} \bigg(B^T + \sum_{i=1}^d D_i^T \theta_i\bigg) Y - \bigg(B^T + \sum_{i=1}^d D_i^T \theta_i\bigg) \tilde{R}\sum_{i=1}^d D_i^T \kappa_i \numberthis \label{eq: dual_derivative_hamiltonian}
+    D_y[\tilde{\mathcal{H}}] = \tilde{\theta}^T p_2 - A p_2 - \sum_{i=1}^d \tilde{\theta}_i^T C_i p_2  + \sum_{i=1}^d \tilde{\theta}_i^T q_{2,i} - \tilde{\theta}^T \tilde{Q}\tilde{\theta} Y- \tilde{\theta}^T \tilde{Q} \tilde{\kappa} - 2 \tilde{\theta}^T \tilde{S}\bigg(B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i\bigg) Y\\
+    - \tilde{\theta}^T \tilde{S}^T \sum_{i=1}^d D_i^T \tilde{\kappa}_i - \bigg( B + \sum_{i=1}^d \tilde{\theta}_i^T D_i \bigg) \tilde{S} \tilde{\kappa} - \bigg(B + \sum_{i=1}^d \tilde{\theta}_i^T D_i \bigg) \tilde{R} \bigg(B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i\bigg) Y - \bigg(B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i\bigg) \tilde{R}\sum_{i=1}^d D_i^T \tilde{\kappa}_i \numberthis \label{eq: dual_derivative_hamiltonian}
 \end{align*}
 Suppose also that
 \begin{equation*}
@@ -704,98 +729,187 @@ Applying Ito's formula to $p_2$,
     \d p_2 &= (\dot{\varphi} Y + \dot{\psi})\d t + \varphi \d Y\\
     &= (\dot{\varphi} Y + \dot{\psi})\d t + \varphi \big[ \alpha - A^T Y - \sum_{i=1}^d C_i^T \beta_i \big]\d t + \varphi \sum_{i=1}^d \beta_i \d W_i\\
     &= \bigg[ \dot{\varphi}Y + \dot{\psi} + \varphi \alpha - \varphi A^T Y -\varphi \sum_{i=1}^d C_i^T \beta_i \bigg] \d t + \varphi \sum_{i=1}^d \beta_i \d W_i\\
-    &= \bigg[ \dot{\varphi}Y + \dot{\psi} + \varphi \theta Y + \varphi \kappa - \varphi A^T Y - \varphi \sum_{i=1}^d C_i^T \theta_i Y - \varphi \sum_{i=1}^d C_i^T \kappa_i \bigg] \d t + \varphi \sum_{i=1}^d (\theta_i Y + \kappa_i) \d W_i \numberthis 
+    &= \bigg[ \dot{\varphi}Y + \dot{\psi} + \varphi \tilde{\theta} Y + \varphi \tilde{\kappa} - \varphi A^T Y - \varphi \sum_{i=1}^d C_i^T \tilde{\theta}_i Y - \varphi \sum_{i=1}^d C_i^T \tilde{\kappa}_i \bigg] \d t + \varphi \sum_{i=1}^d (\tilde{\theta}_i Y + \tilde{\kappa}_i) \d W_i \numberthis 
     \label{eq: dual_ito_p2}
 \end{align*}
 Equating the coefficients of \eqref{eq: dual_ito_p2} and \eqref{eq: fbsde_dual} we get 
 \begin{align}
-    &\dot{\varphi}Y + \dot{\psi} + \varphi \theta Y + \varphi \kappa - \varphi A^T Y - \varphi \sum_{i=1}^d C_i^T \theta_i Y - \varphi \sum_{i=1}^d C_i^T \kappa_i = -D_y[\tilde{\mathcal{H}}] \label{eq: dual_equal_coeff}\\
-    &\varphi \theta_i Y + \varphi \kappa_i = q_{2, i} \label{eq: dual_equal_coeff2}\\
-    &p_2 - \tilde{Q}\alpha - \tilde{S}^T \beta = 0\\
-    &q_{2,i} - C_i p_2 - D_i \tilde{S}\alpha - D_i \tilde{R}\beta = 0
+    &\dot{\varphi}Y + \dot{\psi} + \varphi \tilde{\theta} Y + \varphi \tilde{\kappa} - \varphi A^T Y - \varphi \sum_{i=1}^d C_i^T \tilde{\theta}_i Y - \varphi \sum_{i=1}^d C_i^T \tilde{\kappa}_i = -D_y[\tilde{\mathcal{H}}] \label{eq: dual_equal_coeff}\\
+    &\varphi \tilde{\theta}_i Y + \varphi \tilde{\kappa}_i = q_{2, i} \label{eq: dual_equal_coeff2}\\
+    &p_2 - \tilde{Q}(\tilde{\theta} Y + \tilde{\kappa}) - \tilde{S}^T \bigg(B^T Y + \sum_{i=1}^d D_i^T (\tilde{\theta}_i Y + \tilde{\kappa}_i)\bigg)= 0\\
+    &q_{2,i} - C_i p_2 - D_i \tilde{S}(\tilde{\theta} Y + \tilde{\kappa}) - D_i \tilde{R}\bigg(B^T Y + \sum_{i=1}^d D_i^T (\tilde{\theta}_iY + \tilde{\kappa}_i)\bigg) = 0
 \end{align}
 where the last two equations are the Hamiltonian condition \eqref{eq: dual_hamiltonian_condition1} and \eqref{eq: dual_hamiltonian_condition2}, and the RHS of \eqref{eq: dual_equal_coeff} is given by \eqref{eq: dual_derivative_hamiltonian}. We now substitute $q_{2,i}$ from equation \eqref{eq: dual_equal_coeff2} into the rest and we get
 \begin{align*}
-    &\dot{\varphi}Y + \dot{\psi} + \varphi \theta Y + \varphi \kappa - \varphi A^T Y - \varphi \sum_{i=1}^d C_i^T \theta_i Y - \varphi \sum_{i=1}^d C_i^T \kappa_i = -\theta^T p_2 + A p_2 + \sum_{i=1}^d \theta_i^T C_i p_2\\
-    &+ \sum_{i=1}^d \theta_i^T (\varphi \theta_i Y + \varphi \kappa_i) + \theta^T \tilde{Q}\theta Y + \theta^T \tilde{Q} \kappa + 2 \theta^T \tilde{S}\bigg(B^T + \sum_{i=1}^d D_i^T \theta_i\bigg) Y + \theta^T \tilde{S}^T \sum_{i=1}^d D_i^T \kappa_i\\
-    &+ \bigg( B + \sum_{i=1}^d \theta_i^T D_i \bigg) \tilde{S} \kappa    + \bigg(B + \sum_{i=1}^d \theta_i^T D_i \bigg) \tilde{R} \bigg(B^T + \sum_{i=1}^d D_i^T \theta_i\bigg) Y + \bigg(B^T + \sum_{i=1}^d D_i^T \theta_i\bigg) \tilde{R}\sum_{i=1}^d D_i^T \kappa_i \numberthis \label{eq: dual1}\\
-    &p_2 - \tilde{Q}\alpha - \tilde{S}^T \beta = 0 \numberthis \label{eq: dual2}\\
-    &\varphi \beta_i- C_i p_2 - D_i \tilde{S}\alpha - D_i \tilde{R}\beta = 0 \numberthis \label{eq: dual3}
+    &\dot{\varphi}Y + \dot{\psi} + \varphi \tilde{\theta} Y + \varphi \tilde{\kappa} - \varphi A^T Y - \varphi \sum_{i=1}^d C_i^T \tilde{\theta}_i Y - \varphi \sum_{i=1}^d C_i^T \tilde{\kappa}_i = -\tilde{\theta}^T p_2 + A p_2 + \sum_{i=1}^d \tilde{\theta}_i^T C_i p_2\\
+    &+ \sum_{i=1}^d \tilde{\theta}_i^T (\varphi \tilde{\theta}_i Y + \varphi \tilde{\kappa}_i) + \tilde{\theta}^T \tilde{Q}\tilde{\theta} Y + \tilde{\theta}^T \tilde{Q} \tilde{\kappa} + 2 \tilde{\theta}^T \tilde{S}\bigg(B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i\bigg) Y + \tilde{\theta}^T \tilde{S}^T \sum_{i=1}^d D_i^T \tilde{\kappa}_i\\
+    &+ \bigg( B + \sum_{i=1}^d \tilde{\theta}_i^T D_i \bigg) \tilde{S} \tilde{\kappa}    + \bigg(B + \sum_{i=1}^d \tilde{\theta}_i^T D_i \bigg) \tilde{R} \bigg(B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i\bigg) Y + \bigg(B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i\bigg) \tilde{R}\sum_{i=1}^d D_i^T \tilde{\kappa}_i \numberthis \label{eq: dual1}\\
+    &\varphi Y + \psi - \tilde{Q}(\tilde{\theta} Y + \tilde{\kappa}) - \tilde{S}^T \bigg(B^T Y + \sum_{i=1}^d D_i^T (\tilde{\theta}_i Y + \tilde{\kappa}_i)\bigg)= 0\numberthis \label{eq: dual2}\\
+    &\varphi( \tilde{\theta}_i Y +  \tilde{\kappa}_i) - C_i (\varphi Y + \psi) - D_i \tilde{S}(\tilde{\theta} Y + \tilde{\kappa}) - D_i \tilde{R}\bigg(B^T Y + \sum_{i=1}^d D_i^T (\tilde{\theta}_iY + \tilde{\kappa}_i)\bigg) = 0 \numberthis \label{eq: dual3}
 \end{align*}
-From \eqref{eq: dual2} we get 
-\begin{equation*}
-    \beta = \tilde{S}^\dagger (p_2 - \tilde{Q} \alpha),
-\end{equation*}
-so, plugging it into \eqref{eq: dual3}
-\begin{equation}
-    \beta_i = \varphi^{-1}(C_i p_2 + D_i \tilde{S}\alpha + D_i \tilde{R} \tilde{S}^\dagger p_2 - D_i \tilde{R}\tilde{S}^\dagger \tilde{Q} \alpha) \label{eq: dual4}
-\end{equation}
-Equation \eqref{eq: dual2} is now equivalent to
-\begin{align*}
-    p_2 &= \tilde{Q}\alpha + \tilde{S}^T B^T Y + \tilde{S}^T \sum_{i=1}^d D_i^T \beta_i \\
-    &=\tilde{Q}\alpha + \tilde{S}^T B^T Y + \tilde{S}^T \sum_{i=1}^d D_i^T \varphi^{-1}(C_i p_2 + D_i \tilde{S}\alpha + D_i \tilde{R} \tilde{S}^\dagger p_2 - D_i \tilde{R}\tilde{S}^\dagger \tilde{Q} \alpha)
-\end{align*}
-Rewriting this and plugging in $p_2 = \varphi Y + \psi$ we get 
-\begin{equation}
-    \alpha^\ast = \bigg[ \tilde{Q} +\tilde{S}^T \sum_{i=1}^d D_i^T \varphi^{-1}( D_i \tilde{S} - D_i \tilde{R}\tilde{S}^\dagger \tilde{Q}) \bigg]^{-1} \bigg[\varphi Y + \psi - \tilde{S}^TB^T Y - \tilde{S}^T \sum_{i=1}^d D_i^T \varphi^{-1}(C_i + D_i\tilde{R}\tilde{S}^\dagger)(\varphi Y + \psi)  \bigg]
-\end{equation}
-Now using \eqref{eq: dual4} we get 
-\begin{equation}
-    \beta_i^\ast = \varphi^{-1}\big[ C_i \varphi Y + C_i \psi + D_i \tilde{S}\alpha + D_i \tilde{R} \tilde{S}^\dagger (\varphi Y + \psi) - D_i \tilde{R}\tilde{S}^\dagger \tilde{Q} \alpha^\ast \big]
-\end{equation}
+From equations \eqref{eq: dual2} and \eqref{eq: dual3} one can compute the optimal controls $\alpha^\ast = \tilde{\theta}Y + \tilde{\kappa}$ and $\beta_i^\ast = \tilde{\theta}_i + \tilde{\kappa}_i$. 
+%From \eqref{eq: dual2} we get 
+%\begin{equation*}
+%    \beta = \tilde{S}^\dagger (p_2 - \tilde{Q} \alpha),
+%\end{equation*}
+%so, plugging it into \eqref{eq: dual3}
+%\begin{equation}
+%    \beta_i = \varphi^{-1}(C_i p_2 + D_i \tilde{S}\alpha + D_i \tilde{R} \tilde{S}^\dagger p_2 - D_i \tilde{R}\tilde{S}^\dagger \tilde{Q} \alpha) \label{eq: dual4}
+%\end{equation}
+%Equation \eqref{eq: dual2} is now equivalent to
+%\begin{align*}
+%    p_2 &= \tilde{Q}\alpha + \tilde{S}^T B^T Y + \tilde{S}^T \sum_{i=1}^d D_i^T \beta_i \\
+%    &=\tilde{Q}\alpha + \tilde{S}^T B^T Y + \tilde{S}^T \sum_{i=1}^d D_i^T \varphi^{-1}(C_i p_2 + D_i \tilde{S}\alpha + D_i \tilde{R} \tilde{S}^\dagger p_2 - D_i \tilde{R}\tilde{S}^\dagger \tilde{Q} \alpha)
+%\end{align*}
+%Rewriting this and plugging in $p_2 = \varphi Y + \psi$ we get 
+%\begin{equation}
+%    \alpha^\ast = \bigg[ \tilde{Q} +\tilde{S}^T \sum_{i=1}^d D_i^T \varphi^{-1}( D_i \tilde{S} - D_i \tilde{R}\tilde{S}^\dagger \tilde{Q}) \bigg]^{-1} \bigg[\varphi Y + \psi - \tilde{S}^TB^T Y - \tilde{S}^T \sum_{i=1}^d D_i^T \varphi^{-1}(C_i + D_i\tilde{R}\tilde{S}^\dagger)(\varphi Y + \psi)  \bigg]
+%\end{equation}
+%Now using \eqref{eq: dual4} we get 
+%\begin{equation}
+%    \beta_i^\ast = \varphi^{-1}\big[ C_i \varphi Y + C_i \psi + D_i \tilde{S}\alpha + D_i \tilde{R} \tilde{S}^\dagger (\varphi Y + \psi) - D_i \tilde{R}\tilde{S}^\dagger \tilde{Q} \alpha^\ast \big]
+%\end{equation}
 We rewrite equation \eqref{eq: dual1} as
 \begin{align}
-    \bigg[ \dot{\varphi} + \varphi \theta - \varphi A^T - \varphi \sum_{i=1}^d C_i^T \theta_i + \theta^T \varphi - A \varphi -\sum_{i=1}^d \theta_i C_i \varphi - \sum_{i=1}^d\theta_i^T\varphi \theta_i - \theta^T \tilde{Q}\theta\\
-    - 2\theta^T \tilde{S}(B^T + \sum_{i=1}^d D_i^T \theta_i) - (B + \sum_{i=1}^d\theta_i^T D_i)\tilde{R} (B^T + \sum_{i=1}^d D_i^T \theta_i)\bigg]Y\\
-    + \bigg[ \dot{\psi} + \varphi \kappa - \varphi \sum_{i=1}^d C_i^T \kappa_i + \theta^T \psi - A \psi - \sum_{i=1}^d \theta_i^T C_i \psi - \sum_{i=1}^d \theta_i^T \varphi \kappa_i \\
-    -\theta^T \tilde{Q} \kappa - \theta^T \tilde{S}^T\sum_{i=1}^d D_i^T\kappa_i - (B + \sum_{i=1}^d\theta_i^T D_i) (\tilde{S}\kappa + \tilde{R} \sum_{i=1}^d D_i^T \kappa_i)\bigg] = 0
+    \bigg[ \dot{\varphi} + \varphi \tilde{\theta} - \varphi A^T - \varphi \sum_{i=1}^d C_i^T \tilde{\theta}_i + \tilde{\theta}^T \varphi - A \varphi -\sum_{i=1}^d \tilde{\theta}_i C_i \varphi - \sum_{i=1}^d\tilde{\theta}_i^T\varphi \tilde{\theta}_i - \tilde{\theta}^T \tilde{Q}\tilde{\theta}\\
+    - 2\tilde{\theta}^T \tilde{S}(B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i) - (B + \sum_{i=1}^d\tilde{\theta}_i^T D_i)\tilde{R} (B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i)\bigg]Y\\
+    + \bigg[ \dot{\psi} + \varphi \tilde{\kappa} - \varphi \sum_{i=1}^d C_i^T \tilde{\kappa}_i + \tilde{\theta}^T \psi - A \psi - \sum_{i=1}^d \tilde{\theta}_i^T C_i \psi - \sum_{i=1}^d \tilde{\theta}_i^T \varphi \tilde{\kappa}_i \\
+    -\tilde{\theta}^T \tilde{Q} \tilde{\kappa} - \tilde{\theta}^T \tilde{S}^T\sum_{i=1}^d D_i^T\tilde{\kappa}_i - (B + \sum_{i=1}^d\tilde{\theta}_i^T D_i) (\tilde{S}\tilde{\kappa} + \tilde{R} \sum_{i=1}^d D_i^T \tilde{\kappa}_i)\bigg] = 0
 \end{align}
 Since this must be true for all $Y$, the coefficient in front of $Y$ must be equal to zero, so we get
 \begin{align*}
-    \dot{\varphi} + \varphi \theta - \varphi A^T - \varphi \sum_{i=1}^d C_i^T \theta_i + \theta^T \varphi - A \varphi -\sum_{i=1}^d \theta_i C_i \varphi - \sum_{i=1}^d\theta_i^T\varphi \theta_i - \theta^T \tilde{Q}\theta\\
-    - 2\theta^T \tilde{S}(B^T + \sum_{i=1}^d D_i^T \theta_i) - (B + \sum_{i=1}^d\theta_i^T D_i)\tilde{R} (B^T + \sum_{i=1}^d D_i^T \theta_i) = 0 \numberthis 
+    \dot{\varphi} + \varphi \tilde{\theta} - \varphi A^T - \varphi \sum_{i=1}^d C_i^T \tilde{\theta}_i + \tilde{\theta}^T \varphi - A \varphi -\sum_{i=1}^d \tilde{\theta}_i C_i \varphi - \sum_{i=1}^d\tilde{\theta}_i^T\varphi \tilde{\theta}_i - \tilde{\theta}^T \tilde{Q}\tilde{\theta}\\
+    - 2\tilde{\theta}^T \tilde{S}(B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i) - (B + \sum_{i=1}^d\tilde{\theta}_i^T D_i)\tilde{R} (B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i) = 0 \numberthis 
     \label{eq: dual_bsde_sol1}\\
-    \dot{\psi} + \varphi \kappa - \varphi \sum_{i=1}^d C_i^T \kappa_i + \theta^T \psi - A \psi - \sum_{i=1}^d \theta_i^T C_i \psi - \sum_{i=1}^d \theta_i^T \varphi \kappa_i\\
-    -\theta^T \tilde{Q} \kappa - \theta^T \tilde{S}^T\sum_{i=1}^d D_i^T\kappa_i - (B + \sum_{i=1}^d\theta_i^T D_i) (\tilde{S}\kappa + \tilde{R} \sum_{i=1}^d D_i^T \kappa_i) = 0. \numberthis \label{eq: dual_bsde_sol2}
+    \dot{\psi} + \varphi \tilde{\kappa} - \varphi \sum_{i=1}^d C_i^T \tilde{\kappa}_i + \tilde{\theta}^T \psi - A \psi - \sum_{i=1}^d \tilde{\theta}_i^T C_i \psi - \sum_{i=1}^d \tilde{\theta}_i^T \varphi \tilde{\kappa}_i\\
+    -\tilde{\theta}^T \tilde{Q} \tilde{\kappa} - \tilde{\theta}^T \tilde{S}^T\sum_{i=1}^d D_i^T\tilde{\kappa}_i - (B + \sum_{i=1}^d\tilde{\theta}_i^T D_i) (\tilde{S}\tilde{\kappa} + \tilde{R} \sum_{i=1}^d D_i^T \tilde{\kappa}_i) = 0, \numberthis \label{eq: dual_bsde_sol2}
 \end{align*}
-\subsection{Equivalence between Dual HJB and Dual BSDE}
-From the dual HJB we get
-\begin{align}
-    &\alpha^\ast = \bigg[\tilde{Q} + \tilde{S}^T \sum_{i=1}^d D_i^T a^{-1} (D_i \tilde{S} - D_i\tilde{R}\tilde{S}^\dagger \tilde{Q}) \bigg]^{-1} \bigg[ay+b - \tilde{S}^T B^T Y -\tilde{S}^T \sum_{i=1}^d D_i^T a^{-1} \big(D_i \tilde{R}\tilde{S}^\dagger + C_i\big) (ay+b)\bigg]\\
-    &\beta_i^\ast = a^{-1} \bigg[ (C_i + D_i \tilde{R}\tilde{S}^\dagger) (ay+b)+ (D_i \tilde{S} - D_i \tilde{R}\tilde{S}^\dagger \tilde{Q})\alpha^\ast \bigg]
-\end{align}
-and from the dual BSDE:
+where $\tilde{\theta}, \tilde{\kappa}, \tilde{\theta}_i,$ and $\tilde{\kappa}_i$ satisfy the Hamiltonian condition:
 \begin{align*}
-    &\alpha^\ast = \bigg[ \tilde{Q} +\tilde{S}^T \sum_{i=1}^d D_i^T \varphi^{-1}( D_i \tilde{S} - D_i \tilde{R}\tilde{S}^\dagger \tilde{Q}) \bigg]^{-1} \bigg[\varphi Y + \psi - \tilde{S}^TB^T Y - \tilde{S}^T \sum_{i=1}^d D_i^T \varphi^{-1}(C_i + D_i\tilde{R}\tilde{S}^\dagger)(\varphi Y + \psi)  \bigg] \\
-    &\beta_i^\ast = \varphi^{-1}\big[ C_i \varphi Y + C_i \psi + D_i \tilde{S}\alpha + D_i \tilde{R} \tilde{S}^\dagger (\varphi Y + \psi) - D_i \tilde{R}\tilde{S}^\dagger \tilde{Q} \alpha^\ast \big] 
+    &\varphi Y + \psi - \tilde{Q}(\tilde{\theta} Y + \tilde{\kappa}) - \tilde{S}^T \bigg(B^T Y + \sum_{i=1}^d D_i^T (\tilde{\theta}_i Y + \tilde{\kappa}_i)\bigg)= 0\\
+    &\varphi( \tilde{\theta}_i Y +  \tilde{\kappa}_i) - C_i (\varphi Y + \psi) - D_i \tilde{S}(\tilde{\theta} Y + \tilde{\kappa}) - D_i \tilde{R}\bigg(B^T Y + \sum_{i=1}^d D_i^T (\tilde{\theta}_iY + \tilde{\kappa}_i)\bigg) = 0
 \end{align*}
-Comparing, we get the relation
+and the terminal conditions are given by
 \begin{equation*}
-    \varphi = a, \quad \psi = b,
+    \varphi(T) = - G^{-1}(T), \quad \psi(T) = - G^{-1}(T) L(T).
 \end{equation*}
-and so in both the dual HJB and dual BSDE $\theta, \theta_i, \kappa, \kappa_i$ are the same.\\
 
-The first ODE from the dual BSDE is \eqref{eq: dual_bsde_sol1}, so substituting $a = \varphi$ in it we get 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% EQUIVALENCE DUAL HJB AND DUAL BSDE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Equivalence between Dual HJB and Dual BSDE}
+From the dual HJB we get that $\alpha^\ast = \tilde{\theta}y + \tilde{\kappa}$ and $\beta^\ast = \tilde{\theta}_i y + \tilde{\kappa}_i$, such that $\tilde{\theta}, \tilde{\kappa}, \tilde{\theta}_i$ and $\tilde{\kappa}_i$ satisfy 
 \begin{align*}
-    \dot{a} + a \theta - a A^T - a \sum_{i=1}^d C_i^T \theta_i + \theta^T a - A a -\sum_{i=1}^d \theta_i C_i a - \sum_{i=1}^d\theta_i^Ta \theta_i - \theta^T \tilde{Q}\theta\\
-    - 2\theta^T \tilde{S}(B^T + \sum_{i=1}^d D_i^T \theta_i) - (B + \sum_{i=1}^d\theta_i^T D_i)\tilde{R} (B^T + \sum_{i=1}^d D_i^T \theta_i) = 0
+    &\tilde{P}y + \tilde{M} - \tilde{Q}(\tilde{\theta}y + \tilde{\kappa}) - \tilde{S}^T (B^T Y + \sum_{i=1}^d D_i^T (\tilde{\theta}_i y + \tilde{\kappa}_i)) = 0\\
+    &C_i (\tilde{P}y + \tilde{M}) - \tilde{P} (\tilde{\theta}_i y + \tilde{\kappa}_i)
+    + D_i \tilde{S}(\tilde{\theta}y + \tilde{\kappa}) + D_i\tilde{R}\bigg(B^T Y + \sum_{i=1}^d D_i^T (\tilde{\theta}_i y + \tilde{\kappa}_i)\bigg) = 0
+\end{align*}
+Similarly, from the dual BSDE $\tilde{\theta}, \tilde{\kappa}, \tilde{\theta}_i$ and $\tilde{\kappa}_i$ satisfy 
+
+\begin{align*}
+    &\varphi Y + \psi - \tilde{Q}(\tilde{\theta} Y + \tilde{\kappa}) - \tilde{S}^T \bigg(B^T Y + \sum_{i=1}^d D_i^T (\tilde{\theta}_i Y + \tilde{\kappa}_i)\bigg)= 0\\
+    &\varphi( \tilde{\theta}_i Y +  \tilde{\kappa}_i) - C_i (\varphi Y + \psi) - D_i \tilde{S}(\tilde{\theta} Y + \tilde{\kappa}) - D_i \tilde{R}\bigg(B^T Y + \sum_{i=1}^d D_i^T (\tilde{\theta}_iY + \tilde{\kappa}_i)\bigg) = 0
+\end{align*}
+The solutions of these equations are the same if and only  if we have the relation
+\begin{equation*}
+    \varphi = \tilde{P}, \quad \psi = \tilde{M}.
+\end{equation*}
+The first ODE from the dual BSDE is \eqref{eq: dual_bsde_sol1}, so substituting $\tilde{P} = \varphi$ in it we get 
+\begin{align*}
+    \frac{\d \tilde{P}}{\d t} + \tilde{P} \tilde{\theta} - \tilde{P} A^T - \tilde{P} \sum_{i=1}^d C_i^T \tilde{\theta}_i + \tilde{\theta}^T \tilde{P} - A \tilde{P} -\sum_{i=1}^d \tilde{\theta}_i C_i \tilde{P} - \sum_{i=1}^d\tilde{\theta}_i^T\tilde{P} \tilde{\theta}_i - \tilde{\theta}^T \tilde{Q}\tilde{\theta}\\
+    - 2\tilde{\theta}^T \tilde{S}(B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i) - (B + \sum_{i=1}^d\tilde{\theta}_i^T D_i)\tilde{R} (B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i) = 0
 \end{align*}
 The first ODE from the dual HJB equation is given by \eqref{eq: dual_hjb_sol1}:
 \begin{align*}
-    \frac12 \dot{a} + \theta^T a - A a  - \sum_{i=1}^d \theta_i^T C_i a + \frac12 \sum_{i=1}^d \theta_i^T a \theta_i - \frac12 \theta^T \tilde{Q}\theta - \theta^T \tilde{S}^T \big(B^T + \sum_{i=1}^d D_i^T \theta_i \big)\\
-    - \frac12 \bigg(B + \sum_{i=1}^d\theta_i^T D_i\bigg) \tilde{R} \bigg(B^T + \sum_{i=1}^d D_i^T \theta_i\bigg) = 0
+    \frac12 \frac{\d \tilde{P}}{\d t} + \tilde{\theta}^T \tilde{P} - A \tilde{P}  - \sum_{i=1}^d \tilde{\theta}_i^T C_i \tilde{P} + \frac12 \sum_{i=1}^d \tilde{\theta}_i^T \tilde{P} \tilde{\theta}_i - \frac12 \tilde{\theta}^T \tilde{Q}\tilde{\theta} - \tilde{\theta}^T \tilde{S}^T \big(B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i \big)\\
+    - \frac12 \bigg(B + \sum_{i=1}^d\tilde{\theta}_i^T D_i\bigg) \tilde{R} \bigg(B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i\bigg) = 0
 \end{align*}
-The two equations are equivalent with the second being the first one divided by $2$. Similarly, plugging in $a = \varphi$ and $b = \psi$ in \eqref{eq: dual_bsde_sol2} we get
+The two equations are equivalent with the second being the first one divided by $2$. Similarly, plugging in $\tilde{P} = \varphi$ and $\tilde{M} = \psi$ in \eqref{eq: dual_bsde_sol2} we get
 \begin{align*}
-    \dot{b} + a \kappa - a\sum_{i=1}^d C_i^T \kappa_i + \theta^T b - A b - \sum_{i=1}^d \theta_i^T C_i b - \sum_{i=1}^d \theta_i^T a \kappa_i -\theta^T \tilde{Q} \kappa - \theta^T \tilde{S}^T\sum_{i=1}^d D_i^T\kappa_i\\
-    - (B + \sum_{i=1}^d\theta_i^T D_i) (\tilde{S}\kappa + \tilde{R} \sum_{i=1}^d D_i^T \kappa_i) = 0
+    \frac{\d \tilde{M}}{\d t} + \tilde{P} \tilde{\kappa} - \tilde{P} \sum_{i=1}^d C_i^T \tilde{\kappa}_i + \tilde{\theta}^T \tilde{M} - A \tilde{M} - \sum_{i=1}^d \tilde{\theta}_i^T C_i \tilde{M} - \sum_{i=1}^d \tilde{\theta}_i^T \tilde{P} \tilde{\kappa}_i-\tilde{\theta}^T \tilde{Q} \tilde{\kappa} - \tilde{\theta}^T \tilde{S}^T\sum_{i=1}^d D_i^T\tilde{\kappa}_i\\
+    - (B + \sum_{i=1}^d\tilde{\theta}_i^T D_i) (\tilde{S}\tilde{\kappa} + \tilde{R} \sum_{i=1}^d D_i^T \tilde{\kappa}_i) = 0
 \end{align*}
 The respective ODE from the dual HJB is \eqref{eq: dual_hjb_sol2}:
 \begin{align*}
-    \dot{b} + a \kappa - a \sum_{i=1}^d C_i^T \kappa_i + \theta^T b - Ab - \sum_{i=1}^d \theta_i^T C_i b 
-    + \sum_{i=1}^d\theta_i a \kappa_i - \theta^T \tilde{Q} \kappa - \theta^T \tilde{S}^T \sum_{i=1}^d D_i^T \kappa_i\\
-    - \big(B + \sum_{i=1}^d\theta_i^T D_i \big)\tilde{S}\kappa - \big( B + \sum_{i=1}^d \theta_i^T D_i \big) \tilde{R} \sum_{i=1}^dD_i^T \kappa_i = 0
+    \frac{\d \tilde{M}}{\d t} + \tilde{P} \tilde{\kappa} - \tilde{P} \sum_{i=1}^d C_i^T \tilde{\kappa}_i + \tilde{\theta}^T \tilde{M} - A\tilde{M} - \sum_{i=1}^d \tilde{\theta}_i^T C_i \tilde{M} 
+    + \sum_{i=1}^d\tilde{\theta}_i a \tilde{\kappa}_i - \tilde{\theta}^T \tilde{Q} \tilde{\kappa} - \tilde{\theta}^T \tilde{S}^T \sum_{i=1}^d D_i^T \tilde{\kappa}_i\\
+    - \big(B + \sum_{i=1}^d\tilde{\theta}_i^T D_i \big)\tilde{S}\tilde{\kappa} - \big( B + \sum_{i=1}^d \tilde{\theta}_i^T D_i \big) \tilde{R} \sum_{i=1}^dD_i^T \tilde{\kappa}_i = 0
 \end{align*}
-As we can see the equations are identical, so the two methods are equivalent. 
+As we can see the equations are identical, and their terminal conditions are also the same, so the two methods are equivalent. 
 
-\subsection{Equivalence of Primal BSDE and Dual BSDE}
+\subsection{Equivalence of Primal HJB and Dual HJB}
+Recall that the optimal value of the dual problem was the solution to 
+\begin{equation*}
+    \inf_y (x^T y - \tilde{v}(y)),
+\end{equation*}
+and the optimal value from the primal problem is $-v(x),$ so
+\begin{equation*}
+    v(x) = \sup_y \{\tilde{v}(y) - x^T y \}.
+\end{equation*}
+Substituting the respective ansatz, we have
+\begin{equation*}
+    \frac12 x^T P x + x^T M + N = \sup_y \bigg\{\frac12 y^T \tilde{P} y + y^T \tilde{M} + \tilde{N} - x^T y \bigg\}
+\end{equation*}
+Setting the derivative of the RHS to zero, we get 
+\begin{equation*}
+    y = \tilde{P}^{-1}(x - \tilde{M}),
+\end{equation*}
+so
+\begin{equation*}
+    \frac12 x^T P x + x^T M + N  =\frac12 (x^T - \tilde{M}^T)\tilde{P}^{-1} (x-\tilde{M}) + (x^T - \tilde{M}^T)\tilde{P}^{-1} \tilde{M} + \tilde{N} - x^T \tilde{P}^{-1}(x - \tilde{M})
+\end{equation*}
+Simplifying we get
+\begin{equation*}
+    \frac12 x^T P x + x^T M + N = -\frac12 x^T \tilde{P}^{-1}x + x^T \tilde{P}^{-1}\tilde{M} - \frac12 \tilde{M}^T \tilde{P}^{-1} \tilde{M} + \tilde{N}.
+\end{equation*}
+Therefore, we get the relation
+\begin{equation*}
+    P = - \tilde{P}^{-1}, \quad M = \tilde{P}^{-1} \tilde{M}, \quad N = - \frac12 \tilde{M}^T \tilde{P}^{-1} \tilde{M} + \tilde{N}.
+\end{equation*}
+Consider a simpler case where $d=1$ and $S = 0$. Then $\tilde{S}=0, \tilde{Q}= Q^{-1}, \tilde{R} = R^{-1}$.
+
+Recall that the Riccati equation from the primal problem is given by \eqref{eq: primal_hjb_ricatti_1}
+\begin{equation*}
+     \dot{P}  +  2P A + 2P B \vartheta_1 + (C_1^T + \vartheta_1^T D_1^T)P(C_1 + D_1 \vartheta_1) 
+     -  Q -  \vartheta_1^T R \vartheta_1 = 0,
+\end{equation*}
+where 
+\begin{align*}
+    \vartheta_1 = \bigg(R +  D_1^T  \tilde{P}^{-1} D_1\bigg)^{-1} \bigg( - B^T  \tilde{P}^{-1} - D_1^T  \tilde{P}^{-1} C_1 \bigg)
+\end{align*}
+Therefore, our equation becomes
+\begin{align*}
+    \frac{\d P}{\d t} + 2PA + C_i^T P C_1 + 4PB(D_1^T P D_1 - R)^{-1} B^T P + 6PB(D_1^T P D_1 - R)^{-1} D_1^T P C_1\\
+    + 3C_1^T P D_1 (D_1^T P D_1 - R)^{-1} B^T P - Q = 0
+\end{align*}
+Substituting $P = - \tilde{P}^{-1}$, we get 
+\begin{align*}
+    \tilde{P}^{-1} \frac{\d \tilde{P}}{\d t} \tilde{P}^{-1} - 2\tilde{P}^{-1}A - C_i^T \tilde{P}^{-1} C_1 - 4\tilde{P}^{-1}B(D_1^T \tilde{P}^{-1} D_1 + R)^{-1} B^T \tilde{P}^{-1}\\
+    - 6\tilde{P}^{-1} B(D_1^T \tilde{P}^{-1} D_1 + R)^{-1} D_1^T \tilde{P}^{-1} C_1
+    - 3C_1^T \tilde{P}^{-1} D_1 (D_1^T \tilde{P}^{-1} D_1 + R)^{-1} B^T \tilde{P}^{-1} - Q = 0
+\end{align*}
+Multiplying on the left and on the right by $\tilde{P}$, we get 
+\begin{align*}
+    \frac{\d \tilde{P}}{\d t} - 2A\tilde{P} - \tilde{P}C_1^T \tilde{P}^{-1} C_1 \tilde{P} - 4B(D_1^T \tilde{P}^{-1} D_1  + R)^{-1} B^T 
+    - 6 B(D_1^T \tilde{P}^{-1} D_1 + R)^{-1} D_1^T \tilde{P}^{-1} C_1 \tilde{P}\\
+    - 3 \tilde{P} C_1^T \tilde{P}^{-1} D_1 (D_1^T \tilde{P}^{-1} D_1 + R)^{-1} B^T  - \tilde{P}Q\tilde{P} = 0
+\end{align*}
+On the other hand, for the dual problem we have:
+\begin{align*}
+    \tilde{\theta} = Q \tilde{P}, \quad \tilde{\theta}_1 = (\tilde{P} - D_1 R^{-1} D_1^T)^{-1} (C_1 \tilde{P} + D_1 R^{-1}B^T)
+\end{align*}
+The dual Riccati equation is \eqref{eq: dual_hjb_sol1}:
+\begin{align*}
+     \frac{\d \tilde{P}}{\d t} + \tilde{P}Q \tilde{P} -2 A \tilde{P}  - 2 \tilde{\theta}_1^T C_1 \tilde{P} +  \tilde{\theta}_1^T \tilde{P} \tilde{\theta}_1
+    - \bigg(B +\tilde{\theta}_1^T D_1\bigg) \tilde{R} \bigg(B^T + D_1^T \tilde{\theta}_1\bigg) = 0
+\end{align*}
+Substituting $\tilde{\theta}_1$ we get 
+\begin{align*}
+     \frac{\d \tilde{P}}{\d t} + \tilde{P}Q \tilde{P} -2 A \tilde{P}  - 2 \tilde{P}C^T_1(\tilde{P} - D_1 R^{-1} D_1^T)^{-1} (C_1 \tilde{P} + D_1 R^{-1}B^T)\\
+     + ( \tilde{P}^T C^T_1 + B  R^{-1}D_1^T) (\tilde{P} - D_1 R^{-1} D_1^T)^{-1}  \tilde{P} (\tilde{P} - D_1 R^{-1} D_1^T)^{-1} (C_1 \tilde{P} + D_1 R^{-1}B^T)\\
+    - \bigg(B +( \tilde{P}^T C^T_1 + B  R^{-1}D_1^T) (\tilde{P} - D_1 R^{-1} D_1^T)^{-1} D_1\bigg) {R}^{-1 } \bigg(B^T + D_1^T (\tilde{P} - D_1 R^{-1} D_1^T)^{-1} (C_1 \tilde{P} + D_1 R^{-1}B^T)\bigg) = 0
+\end{align*}
+Rearranging we get
+
+
