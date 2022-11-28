@@ -5,9 +5,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%   PROBLEM DESCRIPTION   %%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Problem Description}
-We first consider a simplified version of the problem where the function $A, B, C_i$ and $D_i$ depend only on time and not on a Markov chain process.\\
-
-The process $X$ is then satisfying the following SDE:
+We consider an $n-$dimensional process $X(t)$ satisfying the following SDE:
 \begin{equation}
     \begin{cases}
         \d X(t) &= \big[(A(t) X(t) + B(t)\pi(t)\big] \d t + \sum_{i=1}^d \big[C_i(t) X(t) + D_i(t) \pi(t) \big] \d W_i(t)\\
@@ -15,6 +13,8 @@ The process $X$ is then satisfying the following SDE:
     \end{cases}
     \label{eq:primal_sde1}
 \end{equation}
+where $W(t)$ is a $d-$dimensional Brownian motion, $\pi(t) \in \R^m$ is the control, $A_i(t), C_i(t) \in \R^{n \times n}$, and $B_i(t), D_i(t) \in \R^{n \times m}$, for $i = \{ 1, \dots, d\}$.\\
+
 For simplicity, we denote
 \begin{align*}
     b(t, X(t), \pi(t))&:= A(t) X(t) + B(t) \pi (t) \in \R^{n}\\
@@ -46,7 +46,7 @@ The system is then written as:
     \end{cases}
     \label{eq: primal_sde2}
 \end{equation}
-The cost functional is once again given by
+The cost functional is given by
 \begin{equation}
     J(t, X(t), \pi(t)) := \E \bigg[ \int_{t_0}^T f(t, X(t), \pi(t)) \d t + g(X(T))\bigg],
     \label{eq: cost_func}
@@ -56,7 +56,7 @@ where $f$ is a quadratic function
     f(t, X(t), \pi(t)) &= \frac12 X^T(t) Q(t) X(t) + X^T(t) S^T(t) \pi(t) + \frac12 \pi^T(t) R(t) \pi(t) \label{eq: f}\\
     g(X(T)) &= \frac12 X^T(T) G(T) X(T) + X^T(T) L(T). \label{eq: g}
 \end{align}
-The objective is to minimise the cost function over the control, and in this section, we assume that $K = \R^m$, i.e. the control is unconstrained:
+The objective is to minimise the cost function over the control:
 \begin{equation}
     \text{Minimise } J(t, X(t), \pi(t)) \text{ over } \pi(t) \in \R^m. \label{eq: minimisation_problem}
 \end{equation}
@@ -506,7 +506,7 @@ where
 \begin{align}
     &\tilde{Q} = Q^{-1} - Q^{-1} S^T (S Q^{-1} S^T - R)^{-1}S Q^{-1} \label{eq: tilde_q}\\
     &\tilde{R} = R^{-1} - R^{-1} S (S^T R^{-1}S - Q^{-1})^{-1}S^T R^{-1} \label{eq: tilde_r}\\
-    &\tilde{S} = (S Q^{-1} S^T - R)^{-1}S Q^{-1} = R^{-1}S(S^TR^{-1}S - Q^{-1})^{-1} \label{eq: tilde_s}
+    &\tilde{S} = (S Q^{-1} S^T - R)^{-1}S Q^{-1} = R^{-1}S(S^TR^{-1}S - Q)^{-1} \label{eq: tilde_s}
 \end{align}
 we get
 \begin{equation}
@@ -532,11 +532,11 @@ The dual control problem is defined by
 \end{equation}
 where $Y$ satisfies \eqref{eq: y_sde}. Problem \eqref{eq: dual_control_problem} can be solved in two steps: first, for fixed $y$, solve a stochastic control problem
 \begin{equation*}
-    -\tilde{v}(y) = \min_{ \alpha, \beta_1, \dots, \beta_d} \E\bigg[\int_{t_0}^T \phi \bigg(t, \alpha, B^T Y + \sum_{i=1}^d D_i^T \beta_i \bigg) \d t + h(Y(T)) \bigg],
+    V(y) = \min_{ \alpha, \beta_1, \dots, \beta_d} \E\bigg[\int_{t_0}^T \phi \bigg(t, \alpha, B^T Y + \sum_{i=1}^d D_i^T \beta_i \bigg) \d t + h(Y(T)) \bigg],
 \end{equation*}
 and second, solve a static optimisation problem
 \begin{equation}
-    \min_y (x^T y - \tilde{v}(y)).
+    \min_y (x^T y + V(y)).
 \end{equation}
 \subsection{Dual Hamilton-Jacobi-Bellman Equation}
 \subsubsection{Deriving the Dual HJB}
@@ -843,13 +843,9 @@ Recall that the optimal value of the dual problem was the solution to
 \begin{equation*}
     \inf_y (x^T y - \tilde{v}(y)),
 \end{equation*}
-and the optimal value from the primal problem is $-v(x),$ so
-\begin{equation*}
-    v(x) = \sup_y \{\tilde{v}(y) - x^T y \}.
-\end{equation*}
 Substituting the respective ansatz, we have
 \begin{equation*}
-    \frac12 x^T P x + x^T M + N = \sup_y \bigg\{\frac12 y^T \tilde{P} y + y^T \tilde{M} + \tilde{N} - x^T y \bigg\}
+    \frac12 x^T P x + x^T M + N = \inf_y \bigg\{ x^T y - \frac12 y^T \tilde{P} y - y^T \tilde{M} - \tilde{N}  \bigg\}
 \end{equation*}
 Setting the derivative of the RHS to zero, we get 
 \begin{equation*}
@@ -857,43 +853,42 @@ Setting the derivative of the RHS to zero, we get
 \end{equation*}
 so
 \begin{equation*}
-    \frac12 x^T P x + x^T M + N  =\frac12 (x^T - \tilde{M}^T)\tilde{P}^{-1} (x-\tilde{M}) + (x^T - \tilde{M}^T)\tilde{P}^{-1} \tilde{M} + \tilde{N} - x^T \tilde{P}^{-1}(x - \tilde{M})
+    \frac12 x^T P x + x^T M + N  = - \frac12 (x^T - \tilde{M}^T)\tilde{P}^{-1} (x-\tilde{M}) - (x^T - \tilde{M}^T)\tilde{P}^{-1} \tilde{M} - \tilde{N} + x^T \tilde{P}^{-1}(x - \tilde{M})
 \end{equation*}
 Simplifying we get
 \begin{equation*}
-    \frac12 x^T P x + x^T M + N = -\frac12 x^T \tilde{P}^{-1}x + x^T \tilde{P}^{-1}\tilde{M} - \frac12 \tilde{M}^T \tilde{P}^{-1} \tilde{M} + \tilde{N}.
+    \frac12 x^T P x + x^T M + N = \frac12 x^T \tilde{P}^{-1}x - x^T \tilde{P}^{-1}\tilde{M} + \frac12 \tilde{M}^T \tilde{P}^{-1} \tilde{M} - \tilde{N}.
 \end{equation*}
 Therefore, we get the relation
 \begin{equation*}
-    P = - \tilde{P}^{-1}, \quad M = \tilde{P}^{-1} \tilde{M}, \quad N = - \frac12 \tilde{M}^T \tilde{P}^{-1} \tilde{M} + \tilde{N}.
+    P = \tilde{P}^{-1}, \quad M = -\tilde{P}^{-1} \tilde{M}, \quad N =  \frac12 \tilde{M}^T \tilde{P}^{-1} \tilde{M} - \tilde{N}.
 \end{equation*}
-Consider a simpler case where $d=1$ and $S = 0$. Then $\tilde{S}=0, \tilde{Q}= Q^{-1}, \tilde{R} = R^{-1}$.
-
-Recall that the Riccati equation from the primal problem is given by \eqref{eq: primal_hjb_ricatti_1}
+Consider a simpler case where $d=1$ and $S = 0$. Then $\tilde{S}=0, \tilde{Q}= Q^{-1}, \tilde{R} = R^{-1}$. Recall that the Riccati equation from the primal problem is given by \eqref{eq: primal_hjb_ricatti_1}
 \begin{equation*}
      \dot{P}  +  2P A + 2P B \vartheta_1 + (C_1^T + \vartheta_1^T D_1^T)P(C_1 + D_1 \vartheta_1) 
      -  Q -  \vartheta_1^T R \vartheta_1 = 0,
 \end{equation*}
 where 
 \begin{align*}
-    \vartheta_1 = \bigg(R +  D_1^T  \tilde{P}^{-1} D_1\bigg)^{-1} \bigg( - B^T  \tilde{P}^{-1} - D_1^T  \tilde{P}^{-1} C_1 \bigg)
+    \vartheta_1 = ( D_1^T  P D_1 - R)^{-1} ( - B^T  P - D_1^T  P C_1 )
 \end{align*}
 Therefore, our equation becomes
 \begin{align*}
-    \frac{\d P}{\d t} + 2PA + C_i^T P C_1 + 4PB(D_1^T P D_1 - R)^{-1} B^T P + 6PB(D_1^T P D_1 - R)^{-1} D_1^T P C_1\\
-    + 3C_1^T P D_1 (D_1^T P D_1 - R)^{-1} B^T P - Q = 0
+    0 = \frac{\d P}{\d t} + 2 PA - Q + C_1^T P C_1 + 2 (P B + C_1^T P D_1) \theta_1 + \theta_1^T (D_1^T P D_1 - R)\theta_1\\
+    = \frac{\d P}{\d t} + 2 PA - Q + C_1^T P C_1 - (P B + C_1^T P D_1) ( D_1^T  P D_1 - R)^{-1} (B^T  P + D_1^T  P C_1 )
 \end{align*}
-Substituting $P = - \tilde{P}^{-1}$, we get 
+Substituting $P = \tilde{P}^{-1}$, we get 
 \begin{align*}
-    \tilde{P}^{-1} \frac{\d \tilde{P}}{\d t} \tilde{P}^{-1} - 2\tilde{P}^{-1}A - C_i^T \tilde{P}^{-1} C_1 - 4\tilde{P}^{-1}B(D_1^T \tilde{P}^{-1} D_1 + R)^{-1} B^T \tilde{P}^{-1}\\
-    - 6\tilde{P}^{-1} B(D_1^T \tilde{P}^{-1} D_1 + R)^{-1} D_1^T \tilde{P}^{-1} C_1
-    - 3C_1^T \tilde{P}^{-1} D_1 (D_1^T \tilde{P}^{-1} D_1 + R)^{-1} B^T \tilde{P}^{-1} - Q = 0
+     \tilde{P}^{-1} \frac{\d \tilde{P}}{\d t} \tilde{P}^{-1} - 2 \tilde{P}^{-1} A + Q - C_1^T \tilde{P}^{-1} C_1 + (\tilde{P}^{-1} B + C_1^T \tilde{P}^{-1} D_1) ( D_1^T  \tilde{P}^{-1} D_1 - R)^{-1} (B^T  \tilde{P}^{-1} + D_1^T  \tilde{P}^{-1} C_1 ) = 0
 \end{align*}
 Multiplying on the left and on the right by $\tilde{P}$, we get 
 \begin{align*}
-    \frac{\d \tilde{P}}{\d t} - 2A\tilde{P} - \tilde{P}C_1^T \tilde{P}^{-1} C_1 \tilde{P} - 4B(D_1^T \tilde{P}^{-1} D_1  + R)^{-1} B^T 
-    - 6 B(D_1^T \tilde{P}^{-1} D_1 + R)^{-1} D_1^T \tilde{P}^{-1} C_1 \tilde{P}\\
-    - 3 \tilde{P} C_1^T \tilde{P}^{-1} D_1 (D_1^T \tilde{P}^{-1} D_1 + R)^{-1} B^T  - \tilde{P}Q\tilde{P} = 0
+    \frac{\d \tilde{P}}{\d t} - 2A\tilde{P} + \tilde{P}Q\tilde{P} - \tilde{P}C_1^T \tilde{P}^{-1} C_1\tilde{P} + \tilde{P}(\tilde{P}^{-1} B + C_1^T \tilde{P}^{-1} D_1) ( D_1^T  \tilde{P}^{-1} D_1 - R)^{-1} (B^T  \tilde{P}^{-1} + D_1^T  \tilde{P}^{-1} C_1 )\tilde{P} = 0 
+\end{align*}
+Rewriting this, we get 
+\begin{align*}
+    \frac{\d \tilde{P}}{\d t} - 2A\tilde{P} + \tilde{P}Q\tilde{P}  + \tilde{P}C_1^T (\Tilde{P}^{-1}D_1 (D_1^T \Tilde{P} D_1 - R)^{-1} D_1^T \Tilde{P}^{-1} - \tilde{P}^{-1} )C_1\tilde{P}+  B(D_1^T \Tilde{P} D_1 - R)B^T \\
+    + 2B(D_1^T \Tilde{P} D_1 - R)^{-1} D_1^t \Tilde{P}^{-1} C_1 \Tilde{P}= 0 \numberthis \label{eq: equiv1}
 \end{align*}
 On the other hand, for the dual problem we have:
 \begin{align*}
@@ -901,15 +896,35 @@ On the other hand, for the dual problem we have:
 \end{align*}
 The dual Riccati equation is \eqref{eq: dual_hjb_sol1}:
 \begin{align*}
-     \frac{\d \tilde{P}}{\d t} + \tilde{P}Q \tilde{P} -2 A \tilde{P}  - 2 \tilde{\theta}_1^T C_1 \tilde{P} +  \tilde{\theta}_1^T \tilde{P} \tilde{\theta}_1
-    - \bigg(B +\tilde{\theta}_1^T D_1\bigg) \tilde{R} \bigg(B^T + D_1^T \tilde{\theta}_1\bigg) = 0
+   \frac{\d \tilde{P}}{\d t} + 2\tilde{\theta}^T \tilde{P} - 2A \tilde{P}  - 2\tilde{\theta}_1^T C_1 \tilde{P} + \tilde{\theta}_1^T \tilde{P} \tilde{\theta}_1 - \tilde{\theta}^T Q^{-1}\tilde{\theta} - (B + \tilde{\theta}_1^T D_1) R^{-1} (B^T + D_1^T \tilde{\theta}_1) = 0
 \end{align*}
-Substituting $\tilde{\theta}_1$ we get 
+Substituting for $\tilde{\theta}$ we get
 \begin{align*}
-     \frac{\d \tilde{P}}{\d t} + \tilde{P}Q \tilde{P} -2 A \tilde{P}  - 2 \tilde{P}C^T_1(\tilde{P} - D_1 R^{-1} D_1^T)^{-1} (C_1 \tilde{P} + D_1 R^{-1}B^T)\\
-     + ( \tilde{P}^T C^T_1 + B  R^{-1}D_1^T) (\tilde{P} - D_1 R^{-1} D_1^T)^{-1}  \tilde{P} (\tilde{P} - D_1 R^{-1} D_1^T)^{-1} (C_1 \tilde{P} + D_1 R^{-1}B^T)\\
-    - \bigg(B +( \tilde{P}^T C^T_1 + B  R^{-1}D_1^T) (\tilde{P} - D_1 R^{-1} D_1^T)^{-1} D_1\bigg) {R}^{-1 } \bigg(B^T + D_1^T (\tilde{P} - D_1 R^{-1} D_1^T)^{-1} (C_1 \tilde{P} + D_1 R^{-1}B^T)\bigg) = 0
+     \frac{\d \tilde{P}}{\d t} + \tilde{P}Q \tilde{P} -2 A \tilde{P}  - 2 \Tilde{P} C_1^T\tilde{\theta}_1 +  \tilde{\theta}_1^T \tilde{P} \tilde{\theta}_1
+    - (B +\tilde{\theta}_1^T D_1) R^{-1} (B^T + D_1^T \tilde{\theta}_1) = 0
 \end{align*}
-Rearranging we get
-
+Substituting for $\tilde{\theta}_1$ we get 
+\begin{align*}
+    0 = \frac{\d \tilde{P}}{\d t} + \tilde{P}Q \tilde{P} -2 A \tilde{P}  - 2 \Tilde{P} C_1^T\tilde{\theta}_1 +  \tilde{\theta}_1^T \tilde{P} \tilde{\theta}_1
+    - (B +\tilde{\theta}_1^T D_1) R^{-1} (B^T + D_1^T \tilde{\theta}_1)\\
+    =\frac{\d \tilde{P}}{\d t} + \tilde{P}Q \tilde{P} -2 A \tilde{P}  - 2 \Tilde{P} C_1^T\tilde{\theta}_1 +  \tilde{\theta}_1^T \tilde{P} \tilde{\theta}_1
+    - B R^{-1}B^T - 2 B R^{-1} D_1^T \tilde{\theta}_1 - \tilde{\theta}_1^T D_1 R^{-1} D_1^T \tilde{\theta}_1\\
+    =\frac{\d \tilde{P}}{\d t} + \tilde{P}Q \tilde{P} -2 A \tilde{P}  
+    - B R^{-1}B^T - 2 (B R^{-1} D_1^T + \Tilde{P} C_1^T)\tilde{\theta}_1 + \tilde{\theta}_1^T (\Tilde{P} - D_1 R^{-1} D_1^T) \tilde{\theta}_1\\
+    = \frac{\d \tilde{P}}{\d t} + \tilde{P}Q \tilde{P} -2 A \tilde{P}  
+    - B R^{-1}B^T -  (B R^{-1} D_1^T + \Tilde{P} C_1^T)(\tilde{P} - D_1 R^{-1} D_1^T)^{-1} (C_1 \tilde{P} + D_1 R^{-1}B^T)
+\end{align*}
+This is then rewritten as 
+\begin{align*}
+    \frac{\d \Tilde{P}}{\d t} - 2 A \Tilde{P} + \Tilde{P} Q \Tilde{P} + \Tilde{P} C_1^T (D_1 R^{-1} D_1^T - \Tilde{P})^{-1} C_1 \Tilde{P} + 2 B R^{-1} D_1^T (D_1 R^{-1} D_1^T - \Tilde{P})^{-1} C_1 \Tilde{P}\\
+    + B (R^{-1}D_1^T (D_1 R^{-1}D_1^T - \Tilde{P})^{-1} D_1 R^{-1} - R^{-1}) B^T 
+     = 0 \numberthis \label{eq: equiv2}
+\end{align*}
+Now noting that
+\begin{align*}
+    (D_1 R^{-1} D_1^T - \Tilde{P})^{-1} = (\Tilde{P}^{-1}D_1 (D_1^T \Tilde{P} D_1 - R)^{-1} D_1^T \Tilde{P}^{-1} - \tilde{P}^{-1} )\\
+    (R^{-1}D_1^T (D_1 R^{-1}D_1^T - \Tilde{P})^{-1} D_1 R^{-1} - R^{-1}) = (D_1^T \Tilde{P} D_1 - R)\\
+    R^{-1} D_1^T (D_1 R^{-1} D_1^T - \Tilde{P})^{-1}= (D_1^T \Tilde{P} D_1 - R)^{-1} D_1^t \Tilde{P}^{-1}
+\end{align*}
+we get exactly \eqref{eq: equiv1}, so the dual and primal HJB methods are equivalent. 
 

@@ -1,9 +1,150 @@
 \section{Unconstrained Optimisation in the Markov case}
-\subsection{Primal HJB}
-\subsection{Primal BSDE}
-The Hmiltonian is given by
+\subsection{Problem Description}
+Let $W(t)$ be a $d-$dimensional Brownian motion and $\eta(t)$ a continuous time finite state observable Markov chain, which are independent of each other. Let the Markov chain take values in the state space $I = \{ 1, 2, \dots, k\}$ and start from an initial state $i_0 \in I$ with a $k \times k$ generator matrix $\mathcal{Q} = \{ {q}_{i j} \}_{i,j = 1}^k$. For each pair of distinct states $(i,j)$ define the counting process $[\mathcal{Q}_{ij}] : \Omega \times [t_0, T] \to \N$ by
+\begin{equation*}
+    [\mathcal{Q}_{ij}](\omega, t):= \sum_{t_0 < s \le t} \chi_{ \{\eta(s-) = i\}}(\omega) \chi_{\{ \eta(s) = j \}}(\omega), \quad \forall t \in [t_0, T],
+\end{equation*}
+and the compensator process $\langle \mathcal{Q}_{ij} \rangle: \Omega \times [t_0, T] \to [0, \infty)$ by
+\begin{equation*}
+    \langle \mathcal{Q}_{ij} \rangle (\omega, t) := q_{ij} \int_{t_0}^t \chi_{\{ \eta(s-)=i \}}(\omega) \d s, \quad \forall t \in [t_0, T].
+\end{equation*}
+The process
+\begin{equation*}
+    \mathcal{Q}_{ij}(\omega, t) := [\mathcal{Q}_{ij}](\omega, t) - \langle \mathcal{Q}_{ij} \rangle (\omega, t)
+\end{equation*}
+is a purely discontinuous square-integrable martingale with initial value zero.\\
+
+We consider an $n-$dimensional process $X(t)$ described by
 \begin{equation}
-    \mathcal{H} = - f + b^T p + \tr (\sigma^T q)
+    \begin{cases}
+        \d X(t) &= b(t, X(t),\pi(t), \eta(t-)) \d t + \sigma(t, x(t), \pi(t), \eta(t-)) \d W(t)\\
+         X(0) &= x_0 \in \R^n, \, \, \eta(0) = i_0 \in I
+    \end{cases}
 \end{equation}
+where $\pi(t) \in \R^m$ is the control and
+\begin{align*}
+    b&:= A(t, \eta(t-)) X(t) + B(t, \eta(t-)) \pi (t) \in \R^{n}\\
+    \sigma &:= 
+    \begin{bmatrix}
+        \begin{pmatrix}
+            \\
+            \\
+            C_1(t, \eta(t-)) X(t) + D_1(t, \eta(t-)) \pi(t)\\
+            \\
+            \\
+        \end{pmatrix} 
+        & \cdots & 
+        \begin{pmatrix}
+            \\
+            \\
+            C_d(t, \eta(t-)) X(t) + D_d(t, \eta(t-)) \pi(t)\\
+            \\
+            \\
+        \end{pmatrix}
+    \end{bmatrix}
+    \in \R^{n \times d}
+\end{align*}
+where $A, C_i \in \R^{n \times n},$ and $B, D_i \in \R^{n \times m}, i \in \{1, \dots, d \}$ are functions of both time and the Markov chain process.\\
+
+The cost functional is given by
+\begin{equation}
+    J(t, X(t), \pi(t), \eta(t)) := \E \bigg[ \int_{t_0}^T f(t, X(t), \pi(t), \eta(t)) \d t + g(X(T), \eta(T))\bigg],
+\end{equation}
+where $f$ is a quadratic function
+\begin{align*}
+    f(t, X(t), \pi(t), \eta(t)) &= \frac{1}{2} X^T(t) Q(t, \eta(t)) X(t) + X^T(t) S^T(t, \eta(t)) \pi(t) + \frac{1}{2}\pi^T(t) R(t, \eta(t)) \pi(t)
+\end{align*}
+and $g$ is 
+\begin{align*}
+    g(X(T), \eta(T)) &= \frac12 X^T(T) G(T, \eta(T)) X(T) + X^T(T) L(T, \eta(T)).
+\end{align*}
+The objective is to minimise the cost function over the control and we introduce the associated value function
+\begin{equation}
+    v(t, X(t)) := \inf_{\pi \in \R^m} J(t, X(t), \pi(t), \eta(t)). 
+\end{equation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  PRIMAL HJB   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Primal HJB}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  PRIMAL BSDE   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Primal BSDE}
+The Hamiltonian $\mathcal{H}: [t_0, T] \times \R^n \times \R^m \times I \times \R^n \times \R^{n \times d} \to \R$ is given by
+\begin{align*}
+    \mathcal{H}(t, x, \pi, i, p, q) :&= - f(t, x, \pi, i) + b^T(t, x, \pi, i) p + \tr (\sigma^T(t,x,\pi, i) q)\\
+    &= -\frac12 x^T Q x - x^TS^T \pi - \frac12 \pi^T R \pi + (x^T A^T + \pi^T B^T)p + \sum_{i=1}^d (x^T C^T_i + \pi^T D_i^T)q_i, \numberthis \label{eq: markov_primal_hamiltonian}
+\end{align*}
+where $q_i \in \R^n$ is the $i^{\text{th}}$ column of $q \in \R^{n \times d}$. Given an admissible pair $(X, \pi)$, the adjoint equation in the unknown adapted processes $p(t), q(t)$ and $s(t) = (s^{(1)}(t), \dots, s^{(n)}(t))$, where $s^{(l)}(t) \in \R^{k \times k}$ for $l \in \{1, \cdots, n \}$, is the following regime-switching BSDE:
+\begin{equation}
+    \begin{cases}
+        \d p(t) &= - D_x[\mathcal{H}(t, X(t), \pi(t), \eta(t-), p(t), q(t))] \d t + q(t) \d W(t) + s(t) \cdot \d \mathcal{Q}(t)\\
+        p(T) &= - D_x[g(X(T), \eta(T))]
+    \end{cases} 
+    \label{eq: markov_adjoint_equation}
+\end{equation}
+where
+\begin{equation}
+    s(t) \cdot \d \mathcal{Q}(t) = \bigg( \sum_{j \ne i} s_{ij}^{(1)} \d \mathcal{Q}_{ij}(t), \cdots , s_{ij}^{(n)} \d \mathcal{Q}_{ij}(t) \bigg)^T
+\end{equation}
+We know that the optimal control maximises the Hamiltonian \eqref{eq: markov_primal_hamiltonian}, that is, the derivative with respect to the control vanishes:
+\begin{equation}
+    D_\pi [\mathcal{H}] = B^T p + \sum_{i=1}^d D_i^T q_i - S X - R \pi= 0 \label{eq: markov_primal_hamiltonian_condition}
+\end{equation}
+We try an ansatz for the control $\pi$ of the form
+\begin{equation}
+    \pi = \theta_2 X + \kappa_2
+\end{equation}
+and an ansatz for $p$ of the form:
+\begin{equation*}
+    p = \varphi(t, \eta(t)) X(t) + \psi(t, \eta(t))
+\end{equation*}
+where $\varphi(t, \eta(t)) \in \R^{n \times n}$ and $\psi(t, \eta) \in \R^{n}$. Substituting the control in the Hamiltonian \eqref{eq: markov_primal_hamiltonian} we get 
+\begin{align*}
+    \mathcal{H} = X^T A^T p + (\vartheta_2 X + \kappa_2)^T B^T p + \sum_{i=1}^d \bigg( X^T C_i^T q_i +  (\vartheta_2 X + \kappa_2)^T D_i^T q_i \bigg)
+    - \frac12 X^T Q X\\ - \frac12 X^T S^T (\vartheta_2 X + \kappa_2) - \frac12 (\vartheta_2 X + \kappa_2)^T S X
+    - \frac12 (\vartheta_2 X + \kappa_2)^T R (\vartheta_2 X + \kappa_2) \numberthis \label{eq: markov_hamiltonian_primal_no_control}
+\end{align*}
+The derivative of the Hamiltonian is then 
+\begin{equation}
+    D_x[\mathcal{H}] = A^T p + \vartheta_2^T B^T p + \sum_{i=1}^d C_i^T q_i + \sum_{i=1}^d \vartheta_2^T D_i^T q_i - QX - 2S^T\vartheta_2 X - S^T \kappa_2 - \vartheta_2^T R \vartheta_2 X - \vartheta_2^T R \kappa_2 \label{eq: markov_hamiltonian_derivative_primal}
+\end{equation}
+On the other hand, applying Ito's formula to $p = \varphi X + \psi$, we have
+\begin{align*}
+    \d p = \sum_{i=1}^k \chi_{\{ \eta(t-) = i\}} \bigg[ \big(\varphi(t, i) A(t, i) + \Delta \varphi(t, i)\big)X + \Delta \psi(t,i) + \varphi(t,i)B(t,i) \pi \bigg] &\d t\\
+    + \varphi(t, \eta(t-)) \sigma(t, \eta(t-)) \d W + \sum_{i \ne j} \big[ \big( \varphi(t,j) -  \varphi(t, i)\big)X + \psi(t, i) -\psi(t,i)  \big] &\d \mathcal{Q}_{ij}
+\end{align*}
+where
+\begin{align*}
+    \Delta \varphi(t, i) &= \frac{\partial \varphi}{\partial t}(t, i) + \sum_{i=1}^k q_{ij} (\varphi(t,j) - \varphi(t,i))\\
+    \Delta \psi(t, i) &= \frac{\partial \psi}{\partial t}(t, i) + \sum_{i=1}^k q_{ij} (\psi(t,j) - \psi(t,i))
+\end{align*}
+Equating coefficients with \eqref{eq: markov_adjoint_equation} we get
+\begin{align}
+    &\sum_{i=1}^k \chi_{\{ \eta(t-) = i\}} \bigg[ \big(\varphi(t, i) A(t, i) + \Delta \varphi(t, i)\big)X + \Delta \psi(t,i) + \varphi(t,i)B(t,i) \pi \bigg] = - D_x[\mathcal{H}]\\
+    &\varphi(t, \eta(t-)) \sigma(t, \eta(t-)) = q(t)\\
+    &\big( \varphi(t,j) -  \varphi(t, i)\big)X + \psi(t, i) -\psi(t,i) = s_{ij}(t)\\
+    &B^T \varphi(t,  + \sum_{i=1}^d D_i^T q_i - S X - R (\theta_2 X + \kappa_2)= 0
+\end{align}
+where the last equation is the Hamiltonian condition \eqref{eq: markov_primal_hamiltonian_condition}. We now substitute $q(t)$ from the second equation into the rest, and our system becomes 
+\begin{align}
+    &\sum_{i=1}^k \chi_{\{ \eta(t-) = i\}} \bigg[ \big(\varphi(t, i) A(t, i) + \Delta \varphi(t, i)\big)X + \Delta \psi(t,i) + \varphi(t,i)B(t,i) \pi \bigg] = - D_x[\mathcal{H}]\\
+    &\varphi(t, \eta(t-)) \sigma(t, \eta(t-)) = q(t)\\
+    &\big( \varphi(t,j) -  \varphi(t, i)\big)X + \psi(t, i) -\psi(t,i) = s_{ij}(t)\\
+    &B^T \varphi(t,  + \sum_{i=1}^d D_i^T q_i - S X - R (\theta_2 X + \kappa_2)= 0
+\end{align}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  DUAL HJB   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \subsection{Dual HJB}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  DUAL BSDE   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \subsection{Dual BSDE}
