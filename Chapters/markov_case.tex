@@ -325,7 +325,83 @@ As we can see, the terminal conditions are the same, so we can conclude that the
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Dual HJB}
+The dual HJB is given by
+\begin{align*}
+    0 = \frac{\partial v}{\partial t}(t, y, i) + \sup_{\alpha, \beta, \gamma} \bigg\{ 
+    \bigg(\alpha - A^T y - \sum_{j=1}^d C_j^T \beta_j - \sum_{j=1}^k \gamma_j q_{ij}\bigg) D_y[v(t,y,i)] + \frac12 \sum_{j=1}^d \beta_j^T D_y^2[v(t,y,i)]\beta_j \\
+    - \phi \big(t, \alpha, B^T y + \sum_{j=1}^d D_j^T \beta_j  \big) + \sum_{j \ne i}^k q_{ij} v(t, y+\gamma_j - \gamma_i, i)\bigg\}
+\end{align*}
+with terminal condition
+\begin{equation*}
+    v(T, y,i) = - h(y,i) = - \frac12 (y^T + L^T(T,i))G^{-1}(T,i)(y + L(T,i))
+\end{equation*}
+We find the optimal controls $\alpha, \beta_1, \dots, \beta_d$ by setting the derivatives to zero:
+\begin{align}
+    &D_y[\tilde{v}] - \tilde{Q}\alpha - \tilde{S}^T (B^T y + \sum_{i=1}^d D_i^T \beta_i) = 0 \\
+    & - C_j D_y[\tilde{v}] + D_y^2[\tilde{v}] \beta_j
+    - D_j (\tilde{S}\alpha + \tilde{R}(B^T y + \sum_{j=1}^d D_j^T \beta_j)) = 0
+\end{align}
+Solving this system, we can get the optimal controls, which we denote by $\alpha^\ast, \beta_j^\ast$. The HJB equation is then
+\begin{align*}
+    0 = \frac{\partial v}{\partial t}(t, y, i) + \sup_{\gamma} \bigg\{ 
+    \bigg(\alpha^\ast - A^T y - \sum_{j=1}^d C_j^T \beta_j^\ast - \sum_{j=1}^k \gamma_j q_{ij}\bigg) D_y[v(t,y,i)] + \frac12 \sum_{j=1}^d \beta_j^T D_y^2[v(t,y,i)]\beta_j \\
+    - \phi \big(t, \alpha^\ast, B^T y + \sum_{j=1}^d D_j^T \beta_j^\ast  \big) + \sum_{j \ne i}^k q_{ij} v(t, y+\gamma_j - \gamma_i, i)\bigg\}
+\end{align*}
+\subsubsection{Solving the dual HJB}
+Suppose that $\tilde{v}$ is a quadratic function in $y$ and use the ansatz
+\begin{equation}
+    \tilde{v}(t,y, i) = \frac12 y^T \tilde{P}(t,i) y + y^T \tilde{M}(t,i) + \tilde{N}(t,i),
+\end{equation}
+with terminal conditions
+\begin{equation}
+    \tilde{P}(T,i) = -G^{-1}(T,i), \quad \tilde{M}(T,i) = - G^{-1}(T,i)L(T,i), \quad \tilde{N}(T,i) = \frac12 L^T(T,i)G^{-1}(T,i)L(T,i). 
+\end{equation}
+Then
+\begin{align*}
+    &\frac{\partial \tilde{v}}{\partial t}(t, y,i) = \frac12 y^T \frac{\d \tilde{P}}{\d t}(t,i) y + y^T \dot{\tilde{M}}(t,i) + \dot{\tilde{N}}(t,i)\\
+    &D_y[\tilde{v}(t,y,i)] = \tilde{P}(t,i) y + \tilde{M}(t,i)\\
+    &D_y^2[\tilde{v}(t,y,i)] = \tilde{P}(t,i)
+\end{align*}
 
+The system of equations from which we derive the optimal controls $\alpha^\ast$ and $\beta_i^\ast$ is now given by 
+\begin{align*}
+    &\tilde{P}y + \tilde{M} - \tilde{Q}\alpha - \tilde{S}^T (B^T Y + \sum_{i=1}^d D_i^T \beta_i) = 0\\
+    &C_i (\tilde{P}y + \tilde{M}) - \tilde{P} \beta_i
+    + D_i (\tilde{S}\alpha + \tilde{R}(B^T y + \sum_{j=1}^d D_j^T \beta_j)) = 0
+\end{align*}
+Clearly, the solutions for $\alpha^\ast$ and $\beta^\ast$ are linear in $y$, hence we denote by $\tilde{\theta}$ and $\tilde{\kappa}$ the coefficients before $y$ and the free coefficient in $\alpha^\ast$ and similarly for $\beta_j$, i.e. 
+\begin{equation}
+    \alpha^\ast = \tilde{\theta} y + \tilde{\kappa}, \quad \beta_j = \tilde{\theta}_j y + \tilde{\kappa}_j. 
+\end{equation}
+Substituting this into the HJB equation we get
+\begin{align*}
+    0 = \frac12 y^T \frac{\d \tilde{P}}{\d t}(t,i) y + y^T \dot{\tilde{M}}(t,i) + \dot{\tilde{N}}(t,i)\\
+    + \sup_{\gamma} \bigg\{ 
+    \bigg( y^T\tilde{\theta}^T + \tilde{\kappa}^T - y^T A  - \sum_{j=1}^d (\tilde{\theta}_j y + \tilde{\kappa}_j)^T C_j^T - \sum_{j\ne i}^k q_{ij}(\gamma_j- \gamma_i)^T \bigg)( \tilde{P}(t,i) y + \tilde{M}(t,i))\\
+    + \frac12 \sum_{j=1}^d (\tilde{\theta}_j y + \tilde{\kappa}_j)^T \Tilde{P}(t,i)(\tilde{\theta}_j y + \tilde{\kappa}_j) 
+    - \phi \big(t, \tilde{\theta} y + \tilde{\kappa}, B^T y + \sum_{j=1}^d D_j^T (\tilde{\theta}_j y + \tilde{\kappa}_j)  \big)\\ + \sum_{j =1}^k q_{ij} \big(\frac12 y^T \Tilde{P}(t,j)y + y^T \Tilde{M}(t,j) + \Tilde{N}(t,j) \big)\\
+    + \sum_{j = 1}^k q_{ij} \big( \frac12 (\gamma_j - \gamma_i)^T \Tilde{P}(t,j) (\gamma_j - \gamma_i) + (\gamma_j - \gamma_i)^T (\Tilde{P}(t,j) y + \Tilde{M}(t,j)) \big)\bigg\}
+\end{align*}
+Setting the derivative w.r.t. $\gamma_j$, $j \ne i$ to zero we get
+\begin{equation*}
+    (\gamma_j - \gamma_i) = \Tilde{P}^{-1}(t,j)\big[ (\Tilde{P}(t,j) - \Tilde{P}(t,i) )y + \Tilde{M}(t,j) - \Tilde{M}(t,i)\big] 
+\end{equation*}
+The HJB is then
+\begin{align*}
+    \frac12 y^T \frac{\d \tilde{P}}{\d t}(t,i) y + y^T \dot{\tilde{M}}(t,i) + \dot{\tilde{N}}(t,i) + 
+    \bigg( y^T\tilde{\theta}^T + \tilde{\kappa}^T - y^T A  - \sum_{j=1}^d (\tilde{\theta}_j y + \tilde{\kappa}_j)^T C_j^T \bigg)( \tilde{P}(t,i) y + \tilde{M}(t,i))\\
+    + \frac12 \sum_{j=1}^d (\tilde{\theta}_j y + \tilde{\kappa}_j)^T \Tilde{P}(t,i)(\tilde{\theta}_j y + \tilde{\kappa}_j) 
+    - \phi \big(t, \tilde{\theta} y + \tilde{\kappa}, B^T y + \sum_{j=1}^d D_j^T (\tilde{\theta}_j y + \tilde{\kappa}_j)  \big)\\ + \sum_{j =1}^k q_{ij} \big(\frac12 y^T \Tilde{P}(t,j)y + y^T \Tilde{M}(t,j) + \Tilde{N}(t,j) \big)
+    - \sum_{j\ne i}^k q_{ij}(\gamma_j- \gamma_i)^T ( \tilde{P}(t,i) y + \tilde{M}(t,i))\\
+    + \sum_{j = 1}^k q_{ij} \big( \frac12 (\gamma_j - \gamma_i)^T \Tilde{P}(t,j) (\gamma_j - \gamma_i) + (\gamma_j - \gamma_i)^T (\Tilde{P}(t,j) y + \Tilde{M}(t,j)) \big) = 0
+\end{align*}
+From this we get the Ricatti equation for the parameter $\Tilde{P}(t,i)$:
+\begin{align*}
+    \bigg[ \frac12 \frac{\d \Tilde{P}}{\d t}(t,i) + (\Tilde{\theta}^T - A - \sum_{j=1}^d \Tilde{\theta}_j^T C_j^T)\Tilde{P}(t,i) + \frac12 \sum_{j=1}^d \Tilde{\theta}_j^T \Tilde{P}(t,i) \Tilde{\theta_j} - \frac12 \tilde{\theta}^T \tilde{Q}\tilde{\theta} - \tilde{\theta}^T \tilde{S}^T \big(B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i \big)\\
+    - \frac12 \bigg(B + \sum_{i=1}^d\tilde{\theta}_i^T D_i\bigg) \tilde{R} \bigg(B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i\bigg) + \frac12\sum_{j=1}^k q_{ij}  \Tilde{P}(t,j)\\
+    + \sum_{j=1}^k q_{ij} \bigg( \frac12 (\Tilde{P}(t,j) - \Tilde{P}(t,i)) \Tilde{P}^{-1}(t,j) (\Tilde{P}(t,j) - \Tilde{P}(t,i)) + (\Tilde{P}(t,j) - \Tilde{P}(t,i))\bigg)\bigg] = 0
+\end{align*}
+Similarly, we can find the equations for $\Tilde{M}(t,i)$ and $\Tilde{N}(t,i)$.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%  DUAL BSDE   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
