@@ -1,0 +1,113 @@
+Applying Ito's formula to $p_2$, we get
+\begin{align*}
+    \d p_2 &= (\frac{\tilde{\varphi}}{\d t} Y + \frac{\tilde{\psi}}{\d t})\d t + \tilde{\varphi} \d Y\\
+    &= (\frac{\tilde{\varphi}}{\d t} Y + \frac{\tilde{\psi}}{\d t})\d t + \tilde{\varphi} \big[ \alpha - A^T Y - \sum_{i=1}^d C_i^T \beta_i \big]\d t + \tilde{\varphi} \sum_{i=1}^d \beta_i \d W_i\\
+    &= \bigg[ \frac{\tilde{\varphi}}{\d t}Y + \frac{\tilde{\psi}}{\d t} + \tilde{\varphi} \alpha - \tilde{\varphi} A^T Y -\tilde{\varphi} \sum_{i=1}^d C_i^T \beta_i \bigg] \d t + \tilde{\varphi} \sum_{i=1}^d \beta_i \d W_i\\
+    &= \bigg[ \frac{\tilde{\varphi}}{\d t}Y + \frac{\tilde{\psi}}{\d t} + \tilde{\varphi} \tilde{\theta} Y + \tilde{\varphi} \tilde{\kappa} - \tilde{\varphi} A^T Y - \tilde{\varphi} \sum_{i=1}^d C_i^T \tilde{\theta}_i Y - \tilde{\varphi} \sum_{i=1}^d C_i^T \tilde{\kappa}_i \bigg] \d t + \tilde{\varphi} \sum_{i=1}^d (\tilde{\theta}_i Y + \tilde{\kappa}_i) \d W_i \numberthis 
+    \label{eq: dual_ito_p2}
+\end{align*}
+Equating the coefficients of \eqref{eq: dual_ito_p2} and \eqref{eq: fbsde_dual} we get 
+\begin{align}
+    &\frac{\tilde{\varphi}}{\d t}Y + \frac{\tilde{\psi}}{\d t} + \tilde{\varphi} \tilde{\theta} Y + \tilde{\varphi} \tilde{\kappa} - \tilde{\varphi} A^T Y - \tilde{\varphi} \sum_{i=1}^d C_i^T \tilde{\theta}_i Y - \tilde{\varphi} \sum_{i=1}^d C_i^T \tilde{\kappa}_i = -D_y[\tilde{\mathcal{H}}] \label{eq: dual_equal_coeff}\\
+    &\tilde{\varphi} \tilde{\theta}_i Y + \tilde{\varphi} \tilde{\kappa}_i = q_{2, i} \label{eq: dual_equal_coeff2}\\
+    &p_2 - \tilde{Q}(\tilde{\theta} Y + \tilde{\kappa}) - \tilde{S}^T \bigg(B^T Y + \sum_{i=1}^d D_i^T (\tilde{\theta}_i Y + \tilde{\kappa}_i)\bigg)= 0\\
+    &q_{2,i} - C_i p_2 - D_i \tilde{S}(\tilde{\theta} Y + \tilde{\kappa}) - D_i \tilde{R}\bigg(B^T Y + \sum_{i=1}^d D_i^T (\tilde{\theta}_iY + \tilde{\kappa}_i)\bigg) = 0
+\end{align}
+where the last two equations are the Hamiltonian condition \eqref{eq: dual_hamiltonian_condition1} and \eqref{eq: dual_hamiltonian_condition2}, and the RHS of \eqref{eq: dual_equal_coeff} is given by \eqref{eq: dual_derivative_hamiltonian}. We now substitute $q_{2,i}$ from equation \eqref{eq: dual_equal_coeff2} into the rest and we get
+\begin{align*}
+    &\frac{\tilde{\varphi}}{\d t}Y + \frac{\tilde{\psi}}{\d t} + \tilde{\varphi} \tilde{\theta} Y + \tilde{\varphi} \tilde{\kappa} - \tilde{\varphi} A^T Y - \tilde{\varphi} \sum_{i=1}^d C_i^T \tilde{\theta}_i Y - \tilde{\varphi} \sum_{i=1}^d C_i^T \tilde{\kappa}_i = -\tilde{\theta}^T p_2 + A p_2 + \sum_{i=1}^d \tilde{\theta}_i^T C_i p_2\\
+    &+ \sum_{i=1}^d \tilde{\theta}_i^T (\tilde{\varphi} \tilde{\theta}_i Y + \tilde{\varphi} \tilde{\kappa}_i) + \tilde{\theta}^T \tilde{Q}\tilde{\theta} Y + \tilde{\theta}^T \tilde{Q} \tilde{\kappa} + 2 \tilde{\theta}^T \tilde{S}\bigg(B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i\bigg) Y + \tilde{\theta}^T \tilde{S}^T \sum_{i=1}^d D_i^T \tilde{\kappa}_i\\
+    &+ \bigg( B + \sum_{i=1}^d \tilde{\theta}_i^T D_i \bigg) \tilde{S} \tilde{\kappa}    + \bigg(B + \sum_{i=1}^d \tilde{\theta}_i^T D_i \bigg) \tilde{R} \bigg(B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i\bigg) Y + \bigg(B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i\bigg) \tilde{R}\sum_{i=1}^d D_i^T \tilde{\kappa}_i \numberthis \label{eq: dual1}\\
+    &\tilde{\varphi} Y + \tilde{\psi} - \tilde{Q}(\tilde{\theta} Y + \tilde{\kappa}) - \tilde{S}^T \bigg(B^T Y + \sum_{i=1}^d D_i^T (\tilde{\theta}_i Y + \tilde{\kappa}_i)\bigg)= 0\numberthis \label{eq: dual2}\\
+    &\tilde{\varphi}( \tilde{\theta}_i Y +  \tilde{\kappa}_i) - C_i (\tilde{\varphi} Y + \tilde{\psi}) - D_i \tilde{S}(\tilde{\theta} Y + \tilde{\kappa}) - D_i \tilde{R}\bigg(B^T Y + \sum_{i=1}^d D_i^T (\tilde{\theta}_iY + \tilde{\kappa}_i)\bigg) = 0 \numberthis \label{eq: dual3}
+\end{align*}
+From equations \eqref{eq: dual2} and \eqref{eq: dual3} one can compute the optimal controls $\alpha^\ast = \tilde{\theta}Y + \tilde{\kappa}$ and $\beta_i^\ast = \tilde{\theta}_i + \tilde{\kappa}_i$. 
+%From \eqref{eq: dual2} we get 
+%\begin{equation*}
+%    \beta = \tilde{S}^\dagger (p_2 - \tilde{Q} \alpha),
+%\end{equation*}
+%so, plugging it into \eqref{eq: dual3}
+%\begin{equation}
+%    \beta_i = \tilde{\varphi}^{-1}(C_i p_2 + D_i \tilde{S}\alpha + D_i \tilde{R} \tilde{S}^\dagger p_2 - D_i \tilde{R}\tilde{S}^\dagger \tilde{Q} \alpha) \label{eq: dual4}
+%\end{equation}
+%Equation \eqref{eq: dual2} is now equivalent to
+%\begin{align*}
+%    p_2 &= \tilde{Q}\alpha + \tilde{S}^T B^T Y + \tilde{S}^T \sum_{i=1}^d D_i^T \beta_i \\
+%    &=\tilde{Q}\alpha + \tilde{S}^T B^T Y + \tilde{S}^T \sum_{i=1}^d D_i^T \tilde{\varphi}^{-1}(C_i p_2 + D_i \tilde{S}\alpha + D_i \tilde{R} \tilde{S}^\dagger p_2 - D_i \tilde{R}\tilde{S}^\dagger \tilde{Q} \alpha)
+%\end{align*}
+%Rewriting this and plugging in $p_2 = \tilde{\varphi} Y + \tilde{\psi}$ we get 
+%\begin{equation}
+%    \alpha^\ast = \bigg[ \tilde{Q} +\tilde{S}^T \sum_{i=1}^d D_i^T \tilde{\varphi}^{-1}( D_i \tilde{S} - D_i \tilde{R}\tilde{S}^\dagger \tilde{Q}) \bigg]^{-1} \bigg[\tilde{\varphi} Y + \tilde{\psi} - \tilde{S}^TB^T Y - \tilde{S}^T \sum_{i=1}^d D_i^T \tilde{\varphi}^{-1}(C_i + D_i\tilde{R}\tilde{S}^\dagger)(\tilde{\varphi} Y + \tilde{\psi})  \bigg]
+%\end{equation}
+%Now using \eqref{eq: dual4} we get 
+%\begin{equation}
+%    \beta_i^\ast = \tilde{\varphi}^{-1}\big[ C_i \tilde{\varphi} Y + C_i \tilde{\psi} + D_i \tilde{S}\alpha + D_i \tilde{R} \tilde{S}^\dagger (\tilde{\varphi} Y + \tilde{\psi}) - D_i \tilde{R}\tilde{S}^\dagger \tilde{Q} \alpha^\ast \big]
+%\end{equation}
+We rewrite equation \eqref{eq: dual1} as
+\begin{align}
+    \bigg[ \frac{\tilde{\varphi}}{\d t} + \tilde{\varphi} \tilde{\theta} - \tilde{\varphi} A^T - \tilde{\varphi} \sum_{i=1}^d C_i^T \tilde{\theta}_i + \tilde{\theta}^T \tilde{\varphi} - A \tilde{\varphi} -\sum_{i=1}^d \tilde{\theta}_i C_i \tilde{\varphi} - \sum_{i=1}^d\tilde{\theta}_i^T\tilde{\varphi} \tilde{\theta}_i - \tilde{\theta}^T \tilde{Q}\tilde{\theta}\\
+    - 2\tilde{\theta}^T \tilde{S}(B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i) - (B + \sum_{i=1}^d\tilde{\theta}_i^T D_i)\tilde{R} (B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i)\bigg]Y\\
+    + \bigg[ \frac{\tilde{\psi}}{\d t} + \tilde{\varphi} \tilde{\kappa} - \tilde{\varphi} \sum_{i=1}^d C_i^T \tilde{\kappa}_i + \tilde{\theta}^T \tilde{\psi} - A \tilde{\psi} - \sum_{i=1}^d \tilde{\theta}_i^T C_i \tilde{\psi} - \sum_{i=1}^d \tilde{\theta}_i^T \tilde{\varphi} \tilde{\kappa}_i \\
+    -\tilde{\theta}^T \tilde{Q} \tilde{\kappa} - \tilde{\theta}^T \tilde{S}^T\sum_{i=1}^d D_i^T\tilde{\kappa}_i - (B + \sum_{i=1}^d\tilde{\theta}_i^T D_i) (\tilde{S}\tilde{\kappa} + \tilde{R} \sum_{i=1}^d D_i^T \tilde{\kappa}_i)\bigg] = 0
+\end{align}
+Since this must be true for all $Y$, the coefficient in front of $Y$ must be equal to zero, so we get
+\begin{align*}
+    \frac{\tilde{\varphi}}{\d t} + \tilde{\varphi} \tilde{\theta} - \tilde{\varphi} A^T - \tilde{\varphi} \sum_{i=1}^d C_i^T \tilde{\theta}_i + \tilde{\theta}^T \tilde{\varphi} - A \tilde{\varphi} -\sum_{i=1}^d \tilde{\theta}_i C_i \tilde{\varphi} - \sum_{i=1}^d\tilde{\theta}_i^T\tilde{\varphi} \tilde{\theta}_i - \tilde{\theta}^T \tilde{Q}\tilde{\theta}\\
+    - 2\tilde{\theta}^T \tilde{S}(B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i) - (B + \sum_{i=1}^d\tilde{\theta}_i^T D_i)\tilde{R} (B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i) = 0 \numberthis 
+    \label{eq: dual_bsde_sol1}\\
+    \frac{\tilde{\psi}}{\d t} + \tilde{\varphi} \tilde{\kappa} - \tilde{\varphi} \sum_{i=1}^d C_i^T \tilde{\kappa}_i + \tilde{\theta}^T \tilde{\psi} - A \tilde{\psi} - \sum_{i=1}^d \tilde{\theta}_i^T C_i \tilde{\psi} - \sum_{i=1}^d \tilde{\theta}_i^T \tilde{\varphi} \tilde{\kappa}_i\\
+    -\tilde{\theta}^T \tilde{Q} \tilde{\kappa} - \tilde{\theta}^T \tilde{S}^T\sum_{i=1}^d D_i^T\tilde{\kappa}_i - (B + \sum_{i=1}^d\tilde{\theta}_i^T D_i) (\tilde{S}\tilde{\kappa} + \tilde{R} \sum_{i=1}^d D_i^T \tilde{\kappa}_i) = 0, \numberthis \label{eq: dual_bsde_sol2}
+\end{align*}
+where $\tilde{\theta}, \tilde{\kappa}, \tilde{\theta}_i,$ and $\tilde{\kappa}_i$ satisfy the Hamiltonian condition:
+\begin{align*}
+    &\tilde{\varphi} Y + \tilde{\psi} - \tilde{Q}(\tilde{\theta} Y + \tilde{\kappa}) - \tilde{S}^T \bigg(B^T Y + \sum_{i=1}^d D_i^T (\tilde{\theta}_i Y + \tilde{\kappa}_i)\bigg)= 0\\
+    &\tilde{\varphi}( \tilde{\theta}_i Y +  \tilde{\kappa}_i) - C_i (\tilde{\varphi} Y + \tilde{\psi}) - D_i \tilde{S}(\tilde{\theta} Y + \tilde{\kappa}) - D_i \tilde{R}\bigg(B^T Y + \sum_{i=1}^d D_i^T (\tilde{\theta}_iY + \tilde{\kappa}_i)\bigg) = 0
+\end{align*}
+and the terminal conditions are given by
+\begin{equation*}
+    \tilde{\varphi}(T) = - G^{-1}(T), \quad \tilde{\psi}(T) = - G^{-1}(T) L(T).
+\end{equation*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% EQUIVALENCE DUAL HJB AND DUAL BSDE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Equivalence between Dual HJB and Dual BSDE}
+From the dual HJB we get that $\alpha^\ast = \tilde{\theta}y + \tilde{\kappa}$ and $\beta^\ast = \tilde{\theta}_i y + \tilde{\kappa}_i$, such that $\tilde{\theta}, \tilde{\kappa}, \tilde{\theta}_i$ and $\tilde{\kappa}_i$ satisfy 
+\begin{align*}
+    &\tilde{P}y + \tilde{M} - \tilde{Q}(\tilde{\theta}y + \tilde{\kappa}) - \tilde{S}^T (B^T Y + \sum_{i=1}^d D_i^T (\tilde{\theta}_i y + \tilde{\kappa}_i)) = 0\\
+    &C_i (\tilde{P}y + \tilde{M}) - \tilde{P} (\tilde{\theta}_i y + \tilde{\kappa}_i)
+    + D_i \tilde{S}(\tilde{\theta}y + \tilde{\kappa}) + D_i\tilde{R}\bigg(B^T Y + \sum_{i=1}^d D_i^T (\tilde{\theta}_i y + \tilde{\kappa}_i)\bigg) = 0
+\end{align*}
+Similarly, from the dual BSDE $\tilde{\theta}, \tilde{\kappa}, \tilde{\theta}_i$ and $\tilde{\kappa}_i$ satisfy 
+
+\begin{align*}
+    &\tilde{\varphi} Y + \tilde{\psi} - \tilde{Q}(\tilde{\theta} Y + \tilde{\kappa}) - \tilde{S}^T \bigg(B^T Y + \sum_{i=1}^d D_i^T (\tilde{\theta}_i Y + \tilde{\kappa}_i)\bigg)= 0\\
+    &\tilde{\varphi}( \tilde{\theta}_i Y +  \tilde{\kappa}_i) - C_i (\tilde{\varphi} Y + \tilde{\psi}) - D_i \tilde{S}(\tilde{\theta} Y + \tilde{\kappa}) - D_i \tilde{R}\bigg(B^T Y + \sum_{i=1}^d D_i^T (\tilde{\theta}_iY + \tilde{\kappa}_i)\bigg) = 0
+\end{align*}
+The solutions of these equations are the same if and only  if we have the relation
+\begin{equation*}
+    \tilde{\varphi} = \tilde{P}, \quad \tilde{\psi} = \tilde{M}.
+\end{equation*}
+The first ODE from the dual BSDE is \eqref{eq: dual_bsde_sol1}, so substituting $\tilde{P} = \tilde{\varphi}$ in it we get 
+\begin{align*}
+    \frac{\d \tilde{P}}{\d t} + \tilde{P} \tilde{\theta} - \tilde{P} A^T - \tilde{P} \sum_{i=1}^d C_i^T \tilde{\theta}_i + \tilde{\theta}^T \tilde{P} - A \tilde{P} -\sum_{i=1}^d \tilde{\theta}_i C_i \tilde{P} - \sum_{i=1}^d\tilde{\theta}_i^T\tilde{P} \tilde{\theta}_i - \tilde{\theta}^T \tilde{Q}\tilde{\theta}\\
+    - 2\tilde{\theta}^T \tilde{S}(B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i) - (B + \sum_{i=1}^d\tilde{\theta}_i^T D_i)\tilde{R} (B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i) = 0
+\end{align*}
+The first ODE from the dual HJB equation is given by \eqref{eq: dual_hjb_sol1}:
+\begin{align*}
+    \frac12 \frac{\d \tilde{P}}{\d t} + \tilde{\theta}^T \tilde{P} - A \tilde{P}  - \sum_{i=1}^d \tilde{\theta}_i^T C_i \tilde{P} + \frac12 \sum_{i=1}^d \tilde{\theta}_i^T \tilde{P} \tilde{\theta}_i - \frac12 \tilde{\theta}^T \tilde{Q}\tilde{\theta} - \tilde{\theta}^T \tilde{S}^T \big(B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i \big)\\
+    - \frac12 \bigg(B + \sum_{i=1}^d\tilde{\theta}_i^T D_i\bigg) \tilde{R} \bigg(B^T + \sum_{i=1}^d D_i^T \tilde{\theta}_i\bigg) = 0
+\end{align*}
+The two equations are equivalent with the second being the first one divided by $2$. Similarly, plugging in $\tilde{P} = \tilde{\varphi}$ and $\tilde{M} = \tilde{\psi}$ in \eqref{eq: dual_bsde_sol2} we get
+\begin{align*}
+    \frac{\d \tilde{M}}{\d t} + \tilde{P} \tilde{\kappa} - \tilde{P} \sum_{i=1}^d C_i^T \tilde{\kappa}_i + \tilde{\theta}^T \tilde{M} - A \tilde{M} - \sum_{i=1}^d \tilde{\theta}_i^T C_i \tilde{M} - \sum_{i=1}^d \tilde{\theta}_i^T \tilde{P} \tilde{\kappa}_i-\tilde{\theta}^T \tilde{Q} \tilde{\kappa} - \tilde{\theta}^T \tilde{S}^T\sum_{i=1}^d D_i^T\tilde{\kappa}_i\\
+    - (B + \sum_{i=1}^d\tilde{\theta}_i^T D_i) (\tilde{S}\tilde{\kappa} + \tilde{R} \sum_{i=1}^d D_i^T \tilde{\kappa}_i) = 0
+\end{align*}
+The respective ODE from the dual HJB is \eqref{eq: dual_hjb_sol2}:
+\begin{align*}
+    \frac{\d \tilde{M}}{\d t} + \tilde{P} \tilde{\kappa} - \tilde{P} \sum_{i=1}^d C_i^T \tilde{\kappa}_i + \tilde{\theta}^T \tilde{M} - A\tilde{M} - \sum_{i=1}^d \tilde{\theta}_i^T C_i \tilde{M} 
+    + \sum_{i=1}^d\tilde{\theta}_i a \tilde{\kappa}_i - \tilde{\theta}^T \tilde{Q} \tilde{\kappa} - \tilde{\theta}^T \tilde{S}^T \sum_{i=1}^d D_i^T \tilde{\kappa}_i\\
+    - \big(B + \sum_{i=1}^d\tilde{\theta}_i^T D_i \big)\tilde{S}\tilde{\kappa} - \big( B + \sum_{i=1}^d \tilde{\theta}_i^T D_i \big) \tilde{R} \sum_{i=1}^dD_i^T \tilde{\kappa}_i = 0
+\end{align*}
+As we can see the equations are identical, and their terminal conditions are also the same, so the two methods are equivalent. 
