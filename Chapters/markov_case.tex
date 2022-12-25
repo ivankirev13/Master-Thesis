@@ -75,9 +75,19 @@ We now derive the dual to the primal problem. First, on a probability space $(\O
     M(t) := \eta(t) - \int_{t_0}^t Q^T \eta(s) \d s,
 \end{equation*}
 where $Q$ is the generating matrix of the Markov chain. Assume that the dual process $Y(t)$ follows
-\begin{equation*}
-    \d Y(t-) = 
-\end{equation*}
+\begin{align*}
+\begin{cases}
+    \d Y(t) &= \alpha'(t) \d t + \sum_{j=1}^d \beta'_j(t) \d W_j(t) + \sum_{j=1}^k \gamma_j(t) \d M_j(t)\\
+    Y(t_0) &= y
+\end{cases}
+\end{align*}
+where $\alpha'(t) \in \mathcal{H}([t_0, T], \R^n)$, $\beta'_j(t) \in \mathcal{H}([t_0, T], \R^n)$ and $\gamma_j(t) \in \mathcal{H}([t_0, T], \R^n)$ are the dual controls.\\
+
+By Ito's lemma:
+\begin{align*}
+    \d (X^T Y) &= X^T \d Y + Y^T \d X + \d \langle X, Y \rangle\\
+    &=X^T \d Y + Y^T \d X +  \\
+\end{align*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%  PRIMAL HJB   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
