@@ -105,9 +105,9 @@ The process $X^T(t)Y(t) - \int_{t_0}^t [X^T(s) \alpha(s) + \pi^T(s) \beta(s)] \d
     \E \bigg[ X^T(T) Y(T) - \int_{t_0}^T \big(X^T \alpha + \pi^T \beta \big) \d s \bigg] \le x^T y. \label{eq: dual_1}
 \end{equation}
 The optimisation problem \eqref{eq: minimisation_problem} can be written equivalently as 
-\begin{equation}
+\begin{equation*}
     \sup_\pi \E \bigg[ -\int_{t_0}^T f(t,x, \pi) \d t - g(X(T)) \bigg].
-\end{equation}
+\end{equation*}
 Define the dual functions $\phi : [t_0, T] \times \R^n \times \R^m \to \R$ by
 \begin{equation}
     \phi(t, \alpha, \beta) = \sup_{x, \pi} \big\{x^T \alpha + \pi^T \beta - f(t, x, \pi) \big\} \label{eq: phi_1}
@@ -236,9 +236,9 @@ where $Y$ satisfies \eqref{eq: y_sde}. Problem \eqref{eq: dual_control_problem} 
     - \tilde{v}(y) = \inf_{ \alpha, \beta_1, \dots, \beta_d} \E\bigg[\int_{t_0}^T \phi (t, \alpha, \beta) \d t + h(Y(T)) \bigg], \label{eq: dual_value_function}
 \end{equation}
 and second, solve a static optimisation problem
-\begin{equation}
+\begin{equation*}
     \inf_y (x^T y - \tilde{v}(y)).
-\end{equation}
+\end{equation*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%   PRIMAL HJB EQUATION   %%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
