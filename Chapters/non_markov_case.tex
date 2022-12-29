@@ -106,7 +106,7 @@ The process $X^T(t)Y(t) - \int_{t_0}^t [X^T(s) \alpha(s) + \pi^T(s) \beta(s)] \d
 \end{equation}
 The optimisation problem \eqref{eq: minimisation_problem} can be written equivalently as 
 \begin{equation*}
-    \sup_\pi \E \bigg[ -\int_{t_0}^T f(t,x, \pi) \d t - g(X(T)) \bigg].
+    \sup_\pi \E \bigg[ -\int_{t_0}^T f(t,X(t), \pi(t)) \d t - g(X(T)) \bigg].
 \end{equation*}
 Define the dual functions $\phi : [t_0, T] \times \R^n \times \R^m \to \R$ by
 \begin{equation}
@@ -225,7 +225,7 @@ Then $h(y)$ is given by
 \end{align*}
 Combining \eqref{eq: dual_1}, \eqref{eq: phi_1}, \eqref{eq: h_1}, we get the following inequality:
 \begin{equation}
-    \sup_\pi \E \bigg[ -\int_{t_0}^T f(t,x,\pi) \d t - g(X(T)) \bigg] \le \inf_{y, \alpha, \beta_1, \dots, \beta_d} \bigg[ x^T y + \E\bigg[\int_{t_0}^T \phi(t,\alpha, \beta ) \d t + h(Y(T)) \bigg] \bigg]. \label{eq: dual_primal_inequality}
+    \sup_\pi \E \bigg[ -\int_{t_0}^T f(t, X,\pi) \d t - g(X(T)) \bigg] \le \inf_{y, \alpha, \beta_1, \dots, \beta_d} \bigg[ x^T y + \E\bigg[\int_{t_0}^T \phi(t,\alpha, \beta ) \d t + h(Y(T)) \bigg] \bigg]. \label{eq: dual_primal_inequality}
 \end{equation}
 The dual control problem is defined by
 \begin{equation}
@@ -233,11 +233,11 @@ The dual control problem is defined by
 \end{equation}
 where $Y$ satisfies \eqref{eq: y_sde}. Problem \eqref{eq: dual_control_problem} can be solved in two steps: first, for fixed $y$, solve a stochastic control problem
 \begin{equation}
-    - \tilde{v}(y) = \inf_{ \alpha, \beta_1, \dots, \beta_d} \E\bigg[\int_{t_0}^T \phi (t, \alpha, \beta) \d t + h(Y(T)) \bigg], \label{eq: dual_value_function}
+    - \tilde{v}(t, y) = \inf_{ \alpha, \beta_1, \dots, \beta_d} \E\bigg[\int_{t_0}^T \phi (t, \alpha, \beta) \d t + h(Y(T)) \bigg], \label{eq: dual_value_function}
 \end{equation}
 and second, solve a static optimisation problem
 \begin{equation*}
-    \inf_y (x^T y - \tilde{v}(y)).
+    \inf_y (x^T y - \tilde{v}(t, y)).
 \end{equation*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%   PRIMAL HJB EQUATION   %%%%%%%%%%%%%%%%%%%%%%

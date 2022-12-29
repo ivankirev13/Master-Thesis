@@ -75,19 +75,160 @@ We now derive the dual to the primal problem. First, on a probability space $(\O
     M(t) := \eta(t) - \int_{t_0}^t Q^T \eta(s) \d s,
 \end{equation*}
 where $Q$ is the generating matrix of the Markov chain. Assume that the dual process $Y(t)$ follows
-\begin{align*}
+\begin{align}
 \begin{cases}
-    \d Y(t) &= \alpha'(t) \d t + \sum_{j=1}^d \beta'_j(t) \d W_j(t) + \sum_{j=1}^k \gamma_j(t) \d M_j(t)\\
+    \d Y(t) &= \bigg[ \alpha(t) - A(t,\eta(t-))^T Y(t) - \sum_{j=1}^d C_j^T(t,\eta(t-)) \beta_j(t)) \bigg]\d t + \sum_{j=1}^d \beta_j(t) \d W_j(t) + \sum_{j=1}^k \gamma_j(t) \d M_j(t)\\
     Y(t_0) &= y
 \end{cases}
-\end{align*}
-where $\alpha'(t) \in \mathcal{H}([t_0, T], \R^n)$, $\beta'_j(t) \in \mathcal{H}([t_0, T], \R^n)$ and $\gamma_j(t) \in \mathcal{H}([t_0, T], \R^n)$ are the dual controls.\\
-
-By Ito's lemma:
+\label{eq: markov_sde_y}
+\end{align}
+where $\alpha(t) \in \mathcal{H}([t_0, T], \R^n)$, $\beta_j(t) \in \mathcal{H}([t_0, T], \R^n)$ and $\gamma_j(t) \in \mathcal{H}([t_0, T], \R^n)$ are the dual controls.Using Ito's lemma to $X(t)^T Y(t)$, we get
 \begin{align*}
-    \d (X^T Y) &= X^T \d Y + Y^T \d X + \d \langle X, Y \rangle\\
-    &=X^T \d Y + Y^T \d X +  \\
+    \d X^T Y &= \bigg[X^T \alpha + \pi^T \beta \bigg] \d t + \sum_{j=1}^d \bigg(X^T \beta_j + Y^T (C_j X + D_j \pi)\bigg) \d W_j,
 \end{align*}
+where
+\begin{equation*}
+    \beta = B^T Y +  \sum_{j=1}^d D_j^T \beta_j.
+\end{equation*}
+The process $X^T(t)Y(t) - \int_{t_0}^t [X^T(s) \alpha(s) + \pi^T(s) \beta(s)] \d s$ is a local martingale and a supermartingale if it is bounded below by an integrable process, which gives 
+\begin{equation}
+    \E \bigg[ X^T(T) Y(T) - \int_{t_0}^T \big(X^T \alpha + \pi^T \beta \big) \d s \bigg] \le x^T y. \label{eq: markov_dual_1}
+\end{equation}
+The optimisation problem \eqref{eq: markov_minimisation_problem} can be written equivalently as 
+\begin{equation*}
+    \sup_\pi \E \bigg[ -\int_{t_0}^T f(t,X(t), \pi(t), \eta(t)) \d t - g(X(T), \eta(T)) \bigg].
+\end{equation*}
+Define the dual functions $\phi : [t_0, T] \times \R^n \times \R^m \times I \to \R$ by
+\begin{equation}
+    \phi(t, \alpha, \beta, \eta(t)) = \sup_{x, \pi} \big\{x^T \alpha + \pi^T \beta - f(t, x, \pi, \eta(t)) \big\} \label{eq: markov_phi_1}
+\end{equation}
+and $h: \R^n \times I \to \R$ by
+\begin{equation}
+    h(y, \eta(T)) = \sup_x \big\{-x^T y - g(x, \eta(T))\big\}. 
+    \label{eq: markov_h_1}
+\end{equation}
+Substituting $f$ and $g$, we can find the supremums by setting the derivatives to zero. We get
+\begin{equation*}
+    \phi(t, \alpha, \beta, \eta(t)) = \sup_{x, \pi} \bigg\{
+    \begin{bmatrix}
+        x\\
+        \pi
+    \end{bmatrix}^T
+    \begin{bmatrix}
+        \alpha\\
+        \beta
+    \end{bmatrix} - \frac12
+    \begin{bmatrix}
+        x\\
+        \pi
+    \end{bmatrix}^T
+    \begin{bmatrix}
+        Q & S^T\\
+        S & R
+    \end{bmatrix}
+    \begin{bmatrix}
+        x\\
+        \pi
+    \end{bmatrix}
+    \bigg\},
+\end{equation*}
+so setting the derivative to zero, we get
+\begin{equation*}
+    \begin{bmatrix}
+        \alpha\\
+        \beta
+    \end{bmatrix} - 
+    \begin{bmatrix}
+        Q & S^T\\
+        S & R
+    \end{bmatrix}
+    \begin{bmatrix}
+        x\\
+        \pi
+    \end{bmatrix}
+    = 0 \implies 
+    \begin{bmatrix}
+        x^\ast\\
+        \pi^\ast
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        Q & S^T\\
+        S & R
+    \end{bmatrix}^{-1}
+    \begin{bmatrix}
+        \alpha\\
+        \beta
+    \end{bmatrix}.
+\end{equation*}
+Therefore
+\begin{align*}
+    \pi^\ast &= \big[ S Q^{-1}S^T - R \big]^{-1}(S Q^{-1} \alpha - \beta)\\
+    x^\ast &= Q^{-1} (\alpha - S^T \pi^\ast)
+\end{align*}
+Then $\phi$ is given by
+\begin{equation*}
+    \phi(t, \alpha, \beta,\eta(t)) = 
+    \frac12
+    \begin{bmatrix}
+        \alpha\\
+        \beta
+    \end{bmatrix}^T
+    \begin{bmatrix}
+        Q & S^T\\
+        S & R
+    \end{bmatrix}^{-1}
+    \begin{bmatrix}
+        \alpha\\
+        \beta
+    \end{bmatrix}. 
+\end{equation*}
+Denoting
+\begin{equation*}\begin{bmatrix}
+        \tilde{Q} & \tilde{S}^T\\
+        \tilde{S} & \tilde{R}
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        Q & S^T\\
+        S & R
+    \end{bmatrix}^{-1},
+\end{equation*}
+where
+\begin{align}
+    &\tilde{Q} = Q^{-1} - Q^{-1} S^T (S Q^{-1} S^T - R)^{-1}S Q^{-1} \label{eq: markov_tilde_q}\\
+    &\tilde{R} = R^{-1} - R^{-1} S (S^T R^{-1}S - Q^{-1})^{-1}S^T R^{-1} \label{eq: markov_tilde_r}\\
+    &\tilde{S} = (S Q^{-1} S^T - R)^{-1}S Q^{-1} = R^{-1}S(S^TR^{-1}S - Q)^{-1} \label{eq: markov_tilde_s}
+\end{align}
+we get
+\begin{equation}
+    \phi(t, \alpha, \beta, \eta(t)) = \frac12 \alpha^T \tilde{Q} \alpha + \alpha^T \tilde{S}^T \beta + \frac12 \beta^T \tilde{R} \beta \label{eq: markov_phi}
+\end{equation}
+Similarly, 
+\begin{equation*}
+    D_x \big[-x^T y - \frac12 x^T G x - x^T L \big] = -y - Gx - L \implies x^\ast = - G^{-1} (y + L).
+\end{equation*}
+Then $h(y, \eta(T))$ is given by
+\begin{align*}
+    h(y, \eta(T)) &= (y^T + L^T) G^{-1} y - \frac12 (y^T + L^T)G^{-1}(y + L) + (y^T + L^T) G^{-1} L\\
+    &= \frac12 \big[ y^T G^{-1} y +  L^T G^{-1} y + y^T G^{-1} L + L^T G^{-1} L\big]\\
+    &= \frac12 (y^T + L^T)G^{-1}(y + L)\numberthis \label{eq: markov_h}
+\end{align*}
+Combining \eqref{eq: markov_dual_1}, \eqref{eq: markov_phi_1}, \eqref{eq: h_1}, we get the following inequality:
+\begin{equation}
+    \sup_\pi \E \bigg[ -\int_{t_0}^T f(t,X,\pi, \eta(t)) \d t - g(X(T), \eta(T)) \bigg] \le \inf_{y, \alpha, \beta_j} \bigg[ x^T y + \E\bigg[\int_{t_0}^T \phi(t,\alpha, \beta, \eta(t) ) \d t + h(Y(T), \eta(T)) \bigg] \bigg] \label{eq: markov_dual_primal_inequality}
+\end{equation}
+The dual control problem is defined by
+\begin{equation}
+    \inf_{y, \alpha, \beta_1, \dots, \beta_d} \bigg[ x^T y + \E\bigg[\int_{t_0}^T \phi(t,\alpha, \beta, \eta(t) ) \d t + h(Y(T), \eta(T)) \bigg] \bigg], \label{eq: markov_dual_control_problem}
+\end{equation}
+This can be solved in two steps: first, for fixed $y$, solve a stochastic control problem
+\begin{equation}
+    - \tilde{v}(t, y, \eta(t)) = \inf_{ \alpha, \beta_1, \dots, \beta_d} \E\bigg[\int_{t_0}^T \phi (t, \alpha, \beta, \eta(t)) \d t + h(Y(T), \eta(T)) \bigg], \label{eq: markov_dual_value_function}
+\end{equation}
+and second, solve a static optimisation problem
+\begin{equation*}
+    \inf_y \big\{x^T y - \tilde{v}(t,y, \eta(t))\big\}.
+\end{equation*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%  PRIMAL HJB   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -337,10 +478,10 @@ We rewrite equation \eqref{eq: markov_eqns1} as
 \end{align*}
 Since this must be true for all $X$, the coefficient in front of $X$ must be equal to zero, so we get
 \begin{align*}
-    \frac{\partial \varphi}{\partial t}(t,i) + 2A^T(t,i) \varphi(t,i) + 2\vartheta_2^T B^T(t,i) \varphi(t,i)
+    \frac{\partial \varphi}{\partial t}(t,i) + 2A^T(t,i) \varphi(t,i) + 2\vartheta_2^T B^T(t,i) \varphi(t,i)\\
     + \sum_{j=1}^d (C_j^T(t,i)  + \vartheta_2^T D_j^T(t,i) )\varphi(t,i) (C_j(t,i) + D_j(t,i) \vartheta_2)\\
     - Q(t,i) - 2S^T(t,i) \vartheta_2 - \vartheta_2^T R(t,i) \vartheta_2 +  \sum_{j=1}^k q_{ij}(\varphi(t,j) - \varphi(t,i)) = 0 \numberthis \label{eq: markov_sol1}\\
-    \frac{\partial \psi}{\partial t}(t,i) + \varphi(t,i) B(t,i) \kappa_2 + A^T(t,i) \psi(t,i) + \vartheta_2^T B^T(t,i) \psi(t,i)
+    \frac{\partial \psi}{\partial t}(t,i) + \varphi(t,i) B(t,i) \kappa_2 + A^T(t,i) \psi(t,i) + \vartheta_2^T B^T(t,i) \psi(t,i)\\
     + \sum_{j=1}^d (C_j^T(t,i) +  \vartheta_2^T D_j^T(t,i)) \varphi(t,i) D_j(t,i) \kappa_2\\
     - S^T(t,i) \kappa_2 - \vartheta_2^T R(t,i) \kappa_2 + \sum_{j=1}^k q_{ij}(\psi(t,j) - \psi(t,i))= 0 \numberthis \label{eq: markov_sol2}
 \end{align*}
@@ -404,7 +545,7 @@ As we can see, the terminal conditions are the same, so we can conclude that the
 The dual HJB is given by
 \begin{align*}
     0 = \frac{\partial v}{\partial t}(t, y, i) + \sup_{\alpha, \beta, \gamma} \bigg\{ 
-    \bigg(\alpha - A^T y - \sum_{j=1}^d C_j^T \beta_j - \sum_{j=1}^k \gamma_j q_{ij}\bigg) D_y[v(t,y,i)] + \frac12 \sum_{j=1}^d \beta_j^T D_y^2[v(t,y,i)]\beta_j \\
+    \bigg(\alpha - A^T y - \sum_{j=1}^d C_j^T \beta_j - \sum_{j=1}^k q_{ij}(\gamma_j - \gamma_i)^T\bigg) D_y[v(t,y,i)] + \frac12 \sum_{j=1}^d \beta_j^T D_y^2[v(t,y,i)]\beta_j \\
     - \phi \big(t, \alpha, B^T y + \sum_{j=1}^d D_j^T \beta_j  \big) + \sum_{j \ne i}^k q_{ij} v(t, y+\gamma_j - \gamma_i, j)\bigg\}
 \end{align*}
 with terminal condition
@@ -425,7 +566,8 @@ We find the optimal controls $\alpha, \beta_1, \dots, \beta_d$ by setting the de
 This is a system of $d+1$ equations in $d+1$ unknowns, so it can be solved and the optimal controls are linear functions of $y$, which we denote by $\alpha^\ast$ and $\beta_j^\ast$. The HJB equation is then
 \begin{align*}
     0 = \frac{\partial v}{\partial t}(t, y, i) + \sup_{\gamma} \bigg\{ 
-    \bigg(\alpha^\ast - A^T y - \sum_{j=1}^d C_j^T \beta_j^\ast - \sum_{j=1}^k \gamma_j q_{ij}\bigg) D_y[v(t,y,i)] + \frac12 \sum_{j=1}^d \beta_j^T D_y^2[v(t,y,i)]\beta_j \\
+    \bigg(\alpha^\ast - A^T y - \sum_{j=1}^d C_j^T \beta_j^\ast - \sum_{j=1}^k  q_{ij}(\gamma_j - \gamma_i)^T\bigg) D_y[v(t,y,i)]\\
+    + \frac12 \sum_{j=1}^d {\beta_j^\ast}^T D_y^2[v(t,y,i)]\beta_j^\ast
     - \phi \big(t, \alpha^\ast, B^T y + \sum_{j=1}^d D_j^T \beta_j^\ast  \big) + \sum_{j \ne i}^k q_{ij} v(t, y+\gamma_j - \gamma_i, j)\bigg\} \numberthis \label{eq: markov_hjb_optimal_controls}
 \end{align*}
 \subsubsection{Solving the dual HJB}
@@ -445,47 +587,50 @@ Then
 \end{align*}
 
 The system of equations from which we derive the optimal controls $\alpha^\ast$ and $\beta_i^\ast$ is now given by 
-\begin{align*}
+\begin{align}
+\begin{cases}
     &\tilde{P}y + \tilde{M} - \tilde{Q}\alpha - \tilde{S}^T (B^T Y + \sum_{i=1}^d D_i^T \beta_i) = 0\\
     &C_i (\tilde{P}y + \tilde{M}) - \tilde{P} \beta_i
     + D_i (\tilde{S}\alpha + \tilde{R}(B^T y + \sum_{j=1}^d D_j^T \beta_j)) = 0
-\end{align*}
+\end{cases}\label{eq: markov_system_controls}
+\end{align}
 We do not solve this system explicitly, however, the solutions for $\alpha^\ast$ and $\beta^\ast$ are linear in $y$, hence we denote by $\tilde{\vartheta}$ and $\tilde{\kappa}$ the coefficients before $y$ and the free coefficient in $\alpha^\ast$ and similarly for $\beta_j$, i.e. 
 \begin{equation}
     \alpha^\ast = \tilde{\vartheta} y + \tilde{\kappa}, \quad \beta_j = \tilde{\vartheta}_j y + \tilde{\kappa}_j. 
 \end{equation}
 Substituting this into the HJB \eqref{eq: markov_hjb_optimal_controls} equation we get
 \begin{align*}
-    0 = \frac12 y^T \frac{\d \tilde{P}}{\d t}(t,i) y + y^T \frac{\d \tilde{M}}{\d t}(t,i) + \frac{\d \tilde{N}}{\d t}(t,i)\\
+   \frac12 y^T \frac{\d \tilde{P}}{\d t}(t,i) y + y^T \frac{\d \tilde{M}}{\d t}(t,i) + \frac{\d \tilde{N}}{\d t}(t,i)\\
     + \sup_{\gamma} \bigg\{ 
     \bigg( y^T\tilde{\vartheta}^T + \tilde{\kappa}^T - y^T A  - \sum_{j=1}^d (\tilde{\vartheta}_j y + \tilde{\kappa}_j)^T C_j^T - \sum_{j\ne i}^k q_{ij}(\gamma_j- \gamma_i)^T \bigg)( \tilde{P}(t,i) y + \tilde{M}(t,i))\\
     + \frac12 \sum_{j=1}^d (\tilde{\vartheta}_j y + \tilde{\kappa}_j)^T \Tilde{P}(t,i)(\tilde{\vartheta}_j y + \tilde{\kappa}_j) 
     - \phi \big(t, \tilde{\vartheta} y + \tilde{\kappa}, B^T y + \sum_{j=1}^d D_j^T (\tilde{\vartheta}_j y + \tilde{\kappa}_j)  \big)\\ + \sum_{j =1}^k q_{ij} \big(\frac12 y^T \Tilde{P}(t,j)y + y^T \Tilde{M}(t,j) + \Tilde{N}(t,j) \big)\\
-    + \sum_{j = 1}^k q_{ij} \big( \frac12 (\gamma_j - \gamma_i)^T \Tilde{P}(t,j) (\gamma_j - \gamma_i) + (\gamma_j - \gamma_i)^T (\Tilde{P}(t,j) y + \Tilde{M}(t,j)) \big)\bigg\}
+    + \sum_{j = 1}^k q_{ij} \big( \frac12 (\gamma_j - \gamma_i)^T \Tilde{P}(t,j) (\gamma_j - \gamma_i) + (\gamma_j - \gamma_i)^T (\Tilde{P}(t,j) y + \Tilde{M}(t,j)) \big)\bigg\} = 0
 \end{align*}
 Setting the derivative w.r.t. $\gamma_j$, $j \ne i$ to zero we get
 \begin{equation*}
-    (\gamma_j - \gamma_i) = \Tilde{P}^{-1}(t,j)\big[ (\Tilde{P}(t,j) - \Tilde{P}(t,i) )y + \Tilde{M}(t,j) - \Tilde{M}(t,i)\big] 
+    (\gamma_j - \gamma_i) = -\Tilde{P}^{-1}(t,j)\big[ (\Tilde{P}(t,j) - \Tilde{P}(t,i) )y + \Tilde{M}(t,j) - \Tilde{M}(t,i)\big] 
 \end{equation*}
 The HJB is then
 \begin{align*}
     \frac12 y^T \frac{\d \tilde{P}}{\d t}(t,i) y + y^T \frac{ \d \tilde{M}}{\d t}(t,i) + \frac{\d \tilde{N}}{\d t}(t,i) + 
     \bigg( y^T\tilde{\vartheta}^T + \tilde{\kappa}^T - y^T A  - \sum_{j=1}^d (\tilde{\vartheta}_j y + \tilde{\kappa}_j)^T C_j^T \bigg)( \tilde{P}(t,i) y + \tilde{M}(t,i))\\
     + \frac12 \sum_{j=1}^d (\tilde{\vartheta}_j y + \tilde{\kappa}_j)^T \Tilde{P}(t,i)(\tilde{\vartheta}_j y + \tilde{\kappa}_j) 
-    - \phi \big(t, \tilde{\vartheta} y + \tilde{\kappa}, B^T y + \sum_{j=1}^d D_j^T (\tilde{\vartheta}_j y + \tilde{\kappa}_j)  \big)\\ + \sum_{j =1}^k q_{ij} \big(\frac12 y^T \Tilde{P}(t,j)y + y^T \Tilde{M}(t,j) + \Tilde{N}(t,j) \big)
-    - \sum_{j\ne i}^k q_{ij}(\gamma_j- \gamma_i)^T ( \tilde{P}(t,i) y + \tilde{M}(t,i))\\
-    + \sum_{j = 1}^k q_{ij} \big( \frac12 (\gamma_j - \gamma_i)^T \Tilde{P}(t,j) (\gamma_j - \gamma_i) + (\gamma_j - \gamma_i)^T (\Tilde{P}(t,j) y + \Tilde{M}(t,j)) \big) = 0
+    - \phi \big(t, \tilde{\vartheta} y + \tilde{\kappa}, B^T y + \sum_{j=1}^d D_j^T (\tilde{\vartheta}_j y + \tilde{\kappa}_j)  \big)\\ 
+    +  \sum_{j\ne i}^k q_{ij} \bigg\{ (\frac12 y^T \Tilde{P}(t,j)y + y^T \Tilde{M}(t,j) + \Tilde{N}(t,j) \big)\\
+    + \big[ (\Tilde{P}(t,j) - \Tilde{P}(t,i) )y + \Tilde{M}(t,j) - \Tilde{M}(t,i)\big] \Tilde{P}^{-1}(t,j) ( \tilde{P}(t,i) y + \tilde{M}(t,i))\\
+    +   \frac12 \big[ (\Tilde{P}(t,j) - \Tilde{P}(t,i) )y + \Tilde{M}(t,j) - \Tilde{M}(t,i)\big]   \Tilde{P}^{-1}(t,j)\big[ (\Tilde{P}(t,j) - \Tilde{P}(t,i) )y + \Tilde{M}(t,j) - \Tilde{M}(t,i)\big]\\  
+    - \big[ (\Tilde{P}(t,j) - \Tilde{P}(t,i) )y + \Tilde{M}(t,j) - \Tilde{M}(t,i)\big] \Tilde{P}^{-1}(t,j) (\Tilde{P}(t,j) y + \Tilde{M}(t,j))  \bigg\} = 0
 \end{align*}
 Rearranging, we get
 \begin{align*}
     y^T \bigg[ \frac12 \frac{\d \Tilde{P}}{\d t}(t,i) + (\Tilde{\vartheta}^T - A(t,i) - \sum_{j=1}^d \Tilde{\vartheta}_j^T C_j^T(t,i))\Tilde{P}(t,i) + \frac12 \sum_{j=1}^d \Tilde{\vartheta}_j^T \Tilde{P}(t,i) \Tilde{\vartheta_j} - \frac12 \tilde{\vartheta}^T \tilde{Q}(t,i)\tilde{\vartheta}\\
     - \tilde{\vartheta}^T \tilde{S}^T(t,i) \big(B^T(t,i) + \sum_{i=1}^d D_i^T(t,i) \tilde{\vartheta}_i \big)
     - \frac12 \bigg(B(t,i) + \sum_{i=1}^d\tilde{\vartheta}_i^T D_i(t,i)\bigg) \tilde{R}(t,i) \bigg(B^T(t,i) + \sum_{i=1}^d D_i^T(t,i) \tilde{\vartheta}_i\bigg)\\
-    + \frac12\sum_{j=1}^k q_{ij}  \Tilde{P}(t,j)
-    + \sum_{j=1}^k q_{ij} \bigg( \frac12 (\Tilde{P}(t,j) - \Tilde{P}(t,i)) \Tilde{P}^{-1}(t,j) (\Tilde{P}(t,j) - \Tilde{P}(t,i)) + (\Tilde{P}(t,j) - \Tilde{P}(t,i))\bigg) \bigg] \\
+    + \sum_{j\ne i}^k q_{ij}  \big[ \Tilde{P}(t,i) - \frac12 \Tilde{P}(t,i)\Tilde{P}^{-1}(t,j)\Tilde{P}(t,i)\big] \\
     + y^T \bigg[ \frac{\d \Tilde{M}}{\d t}(t,i) + \Tilde{\vartheta}^T \Tilde{M}(t,i) - A(t,i) \Tilde{M}(t,i) + \Tilde{P}(t,i) \Tilde{\kappa} - \sum_{j=1}^d \Tilde{\vartheta}_j^T C_j^T(t,i) \Tilde{M}(t,i) + \sum_{j=1}^d \Tilde{P}(t,i) C_j(t,i) \Tilde{\kappa}_j\\
-    \Tilde{\vartheta}_j^T \Tilde{P}(t,i) \Tilde{\kappa}_j - \tilde{\vartheta}^T \Tilde{Q}(t,i) \Tilde{\kappa} - \Tilde{\vartheta}^T \Tilde{S}^T \sum_{j=1}^d D_j^T(t,i) \Tilde{\kappa}_j - \bigg(B + \sum_{j=1}^d \Tilde{\vartheta}_j^T D_j(t,i)\bigg)\Tilde{S}(t,i) \Tilde{\kappa} - \bigg( B(t,i)\\
-    + \sum_{j=1}^d \Tilde{\vartheta}_j^T D_j(t,i) \bigg) \Tilde{R}(t,i) \sum_{j=1}^d D_j^T \Tilde{\kappa}_j  \bigg]\\
+    \Tilde{\vartheta}_j^T \Tilde{P}(t,i) \Tilde{\kappa}_j - \tilde{\vartheta}^T \Tilde{Q}(t,i) \Tilde{\kappa} - \Tilde{\vartheta}^T \Tilde{S}^T(t,i) \sum_{j=1}^d D_j^T(t,i) \Tilde{\kappa}_j - \bigg(B(t,i) + \sum_{j=1}^d \Tilde{\vartheta}_j^T D_j(t,i)\bigg)\Tilde{S}(t,i) \Tilde{\kappa}\\
+    - \bigg( B(t,i) + \sum_{j=1}^d \Tilde{\vartheta}_j^T D_j(t,i) \bigg) \Tilde{R}(t,i) \sum_{j=1}^d D_j^T \Tilde{\kappa}_j  \bigg]\\
     + = 0
 \end{align*}
 This equation must equal zero for all $y$, hence the coefficients in front of the quadratic term, as well as $y^T$ and the free coefficient must be zero. Setting the coefficients to zero, we get the system
@@ -660,7 +805,7 @@ The first ODE from the dual BSDE is \eqref{eq: markov_dual_bsde_sol1}, so substi
 The first ODE from the dual HJB is \eqref{eq: markov_dual_ricatti1}:
 \begin{align*}
      \frac12 \frac{\partial \Tilde{P}}{\partial t}(t,i) + (\Tilde{\vartheta}^T - A - \sum_{j=1}^d \Tilde{\vartheta}_j^T C_j^T)\Tilde{P}(t,i) + \frac12 \sum_{j=1}^d \Tilde{\vartheta}_j^T \Tilde{P}(t,i) \Tilde{\vartheta_j} - \frac12 \tilde{\vartheta}^T \tilde{Q}\tilde{\vartheta} - \tilde{\vartheta}^T \tilde{S}^T \big(B^T + \sum_{i=1}^d D_i^T \tilde{\vartheta}_i \big)\\
-    - \frac12 \bigg(B + \sum_{i=1}^d\tilde{\vartheta}_i^T D_i\bigg) \tilde{R} \bigg(B^T + \sum_{i=1}^d D_i^T \tilde{\vartheta}_i\bigg) \sum_{j \ne i}+ \frac12 q_{ij} (\Tilde{P}(t,j) - \Tilde{P}(t,i))\\
+    - \frac12 \bigg(B + \sum_{i=1}^d\tilde{\vartheta}_i^T D_i\bigg) \tilde{R} \bigg(B^T + \sum_{i=1}^d D_i^T \tilde{\vartheta}_i\bigg) + \sum_{j \ne i} \frac12 q_{ij} (\Tilde{P}(t,j) - \Tilde{P}(t,i))\\
     + \frac12 \sum_{j=1}^k q_{ij} (\varphi(t,i) - \varphi(t,i)\varphi^{-1}(t,j)\varphi(t,i)) = 0
 \end{align*}
 which is the same equation as the one from the dual BSDE, divided by $2$. So we conclude that the two methods are equivalent.
