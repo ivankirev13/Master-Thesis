@@ -867,93 +867,63 @@ the two methods are equivalent.
 \subsection{Primal and Dual Equivalence}
 This section shows equivalence between the primal HJB and dual HJB solutions. Recall that we have the relation between the dual and primal value functions \eqref{eq: markov_dual_primal_inequality}:
 \begin{equation*}
-    v(x) \le \inf_y \{x^T y - \Tilde{v}(y)  \}
+    v(t,x,i) \le \inf_y \{x^T y - \Tilde{v}(t,y,i)  \}
 \end{equation*}
 In this section, we impose no constraints on the control, and we will show that this leads to equality instead of inequality in the above equation. Substituting the respective ansatz, we have
 \begin{equation*}
-    \frac12 x^T P x + x^T M + N = \inf_y \bigg\{ x^T y - \frac12 y^T \tilde{P} y - y^T \tilde{M} - \tilde{N}  \bigg\}
+    \frac12 x^T P(t,i) x + x^T M(t,i) + N(t,i) = \inf_y \bigg\{ x^T y - \frac12 y^T \tilde{P}(t,i) y - y^T \tilde{M}(t,i) - \tilde{N}(t,i)  \bigg\}
 \end{equation*}
 Setting the derivative of the RHS to zero, we get 
 \begin{equation*}
-    y = \tilde{P}^{-1}(x - \tilde{M}),
+    y = \tilde{P}^{-1(t,i)}(x - \tilde{M}(t,i)),
 \end{equation*}
 so
 \begin{equation*}
-    \frac12 x^T P x + x^T M + N  = - \frac12 (x^T - \tilde{M}^T)\tilde{P}^{-1} (x-\tilde{M}) - (x^T - \tilde{M}^T)\tilde{P}^{-1} \tilde{M} - \tilde{N} + x^T \tilde{P}^{-1}(x - \tilde{M})
-\end{equation*}
-Simplifying we get
-\begin{equation*}
-    \frac12 x^T P x + x^T M + N = \frac12 x^T \tilde{P}^{-1}x - x^T \tilde{P}^{-1}\tilde{M} + \frac12 \tilde{M}^T \tilde{P}^{-1} \tilde{M} - \tilde{N}.
+    \frac12 x^T P(t,i) x + x^T M(t,i) + N(t,i) = \frac12 x^T \tilde{P}^{-1}(t,i)x - x^T \tilde{P}^{-1}(t,i)\tilde{M}(t,i) + \frac12 \tilde{M}^T(t,i) \tilde{P}^{-1}(t,i) \tilde{M}(t,i) - \tilde{N}(t,i).
 \end{equation*}
 Therefore, we get the relation
-\begin{equation*}
-    P = \tilde{P}^{-1}, \quad M = -\tilde{P}^{-1} \tilde{M}, \quad N =  \frac12 \tilde{M}^T \tilde{P}^{-1} \tilde{M} - \tilde{N}.
-\end{equation*}
-To simplify computations, we consider a simpler case where $d=1$ and $S = 0$. Then $\tilde{S}=0, \tilde{Q}= Q^{-1}, \tilde{R} = R^{-1}$.
-The Riccati equation from the primal problem in this case is given by \eqref{eq: markov_ricatti1}
-\begin{equation*}
-     \dot{P}  +  2P A + 2P B \vartheta_1 + (C_1^T + \vartheta_1^T D_1^T)P(C_1 + D_1 \vartheta_1) 
-     -  Q -  \vartheta_1^T R \vartheta_1 = 0,
-\end{equation*}
-where 
-\begin{align*}
-    \vartheta_1 = ( D_1^T  P D_1 - R)^{-1} ( - B^T  P - D_1^T  P C_1 )
-\end{align*}
-Therefore, our equation becomes
-\begin{align*}
-    0 = \frac{\d P}{\d t} + 2 PA - Q + C_1^T P C_1 + 2 (P B + C_1^T P D_1) \vartheta_1 + \vartheta_1^T (D_1^T P D_1 - R)\vartheta_1\\
-    = \frac{\d P}{\d t} + 2 PA - Q + C_1^T P C_1 - (P B + C_1^T P D_1) ( D_1^T  P D_1 - R)^{-1} (B^T  P + D_1^T  P C_1 )
-\end{align*}
-Substituting $P = \tilde{P}^{-1}$, we get 
-\begin{align*}
-     \tilde{P}^{-1} \frac{\d \tilde{P}}{\d t} \tilde{P}^{-1} - 2 \tilde{P}^{-1} A + Q - C_1^T \tilde{P}^{-1} C_1 + (\tilde{P}^{-1} B + C_1^T \tilde{P}^{-1} D_1) ( D_1^T  \tilde{P}^{-1} D_1 - R)^{-1} (B^T  \tilde{P}^{-1} + D_1^T  \tilde{P}^{-1} C_1 ) = 0
-\end{align*}
-Multiplying on the left and on the right by $\tilde{P}$, we get 
-\begin{align*}
-    \frac{\d \tilde{P}}{\d t} - 2A\tilde{P} + \tilde{P}Q\tilde{P} - \tilde{P}C_1^T \tilde{P}^{-1} C_1\tilde{P} + \tilde{P}(\tilde{P}^{-1} B + C_1^T \tilde{P}^{-1} D_1) ( D_1^T  \tilde{P}^{-1} D_1 - R)^{-1} (B^T  \tilde{P}^{-1} + D_1^T  \tilde{P}^{-1} C_1 )\tilde{P} = 0 
-\end{align*}
-Rewriting this, we get 
-\begin{align*}
-    \frac{\d \tilde{P}}{\d t} - 2A\tilde{P} + \tilde{P}Q\tilde{P}  + \tilde{P}C_1^T (\Tilde{P}^{-1}D_1 (D_1^T \Tilde{P} D_1 - R)^{-1} D_1^T \Tilde{P}^{-1} - \tilde{P}^{-1} )C_1\tilde{P}+  B(D_1^T \Tilde{P} D_1 - R)B^T \\
-    + 2B(D_1^T \Tilde{P} D_1 - R)^{-1} D_1^t \Tilde{P}^{-1} C_1 \Tilde{P}= 0 \numberthis \label{eq: markov_equiv1}
-\end{align*}
-On the other hand, for the dual problem we have:
-\begin{align*}
-    \tilde{\vartheta} = Q \tilde{P}, \quad \tilde{\vartheta}_1 = (\tilde{P} - D_1 R^{-1} D_1^T)^{-1} (C_1 \tilde{P} + D_1 R^{-1}B^T)
-\end{align*}
-The dual Riccati equation is \eqref{eq: markov_dual_ricatti1}:
-\begin{align*}
-   \frac{\d \tilde{P}}{\d t} + 2\tilde{\vartheta}^T \tilde{P} - 2A \tilde{P}  - 2\tilde{\vartheta}_1^T C_1 \tilde{P} + \tilde{\vartheta}_1^T \tilde{P} \tilde{\vartheta}_1 - \tilde{\vartheta}^T Q^{-1}\tilde{\vartheta} - (B + \tilde{\vartheta}_1^T D_1) R^{-1} (B^T + D_1^T \tilde{\vartheta}_1) = 0
-\end{align*}
-Substituting for $\tilde{\vartheta}$ we get
-\begin{align*}
-     \frac{\d \tilde{P}}{\d t} + \tilde{P}Q \tilde{P} -2 A \tilde{P}  - 2 \Tilde{P} C_1^T\tilde{\vartheta}_1 +  \tilde{\vartheta}_1^T \tilde{P} \tilde{\vartheta}_1
-    - (B +\tilde{\vartheta}_1^T D_1) R^{-1} (B^T + D_1^T \tilde{\vartheta}_1) = 0
-\end{align*}
-Substituting for $\tilde{\vartheta}_1$ we get 
-\begin{align*}
-    0 = \frac{\d \tilde{P}}{\d t} + \tilde{P}Q \tilde{P} -2 A \tilde{P}  - 2 \Tilde{P} C_1^T\tilde{\vartheta}_1 +  \tilde{\vartheta}_1^T \tilde{P} \tilde{\vartheta}_1
-    - (B +\tilde{\vartheta}_1^T D_1) R^{-1} (B^T + D_1^T \tilde{\vartheta}_1)\\
-    =\frac{\d \tilde{P}}{\d t} + \tilde{P}Q \tilde{P} -2 A \tilde{P}  - 2 \Tilde{P} C_1^T\tilde{\vartheta}_1 +  \tilde{\vartheta}_1^T \tilde{P} \tilde{\vartheta}_1
-    - B R^{-1}B^T - 2 B R^{-1} D_1^T \tilde{\vartheta}_1 - \tilde{\vartheta}_1^T D_1 R^{-1} D_1^T \tilde{\vartheta}_1\\
-    =\frac{\d \tilde{P}}{\d t} + \tilde{P}Q \tilde{P} -2 A \tilde{P}  
-    - B R^{-1}B^T - 2 (B R^{-1} D_1^T + \Tilde{P} C_1^T)\tilde{\vartheta}_1 + \tilde{\vartheta}_1^T (\Tilde{P} - D_1 R^{-1} D_1^T) \tilde{\vartheta}_1\\
-    = \frac{\d \tilde{P}}{\d t} + \tilde{P}Q \tilde{P} -2 A \tilde{P}  
-    - B R^{-1}B^T -  (B R^{-1} D_1^T + \Tilde{P} C_1^T)(\tilde{P} - D_1 R^{-1} D_1^T)^{-1} (C_1 \tilde{P} + D_1 R^{-1}B^T)
-\end{align*}
-This is then rewritten as 
-\begin{align*}
-    \frac{\d \Tilde{P}}{\d t} - 2 A \Tilde{P} + \Tilde{P} Q \Tilde{P} + \Tilde{P} C_1^T (D_1 R^{-1} D_1^T - \Tilde{P})^{-1} C_1 \Tilde{P} + 2 B R^{-1} D_1^T (D_1 R^{-1} D_1^T - \Tilde{P})^{-1} C_1 \Tilde{P}\\
-    + B (R^{-1}D_1^T (D_1 R^{-1}D_1^T - \Tilde{P})^{-1} D_1 R^{-1} - R^{-1}) B^T 
-     = 0 \numberthis \label{eq: markov_equiv2}
-\end{align*}
-Now noting that
-\begin{align*}
-    (D_1 R^{-1} D_1^T - \Tilde{P})^{-1} = \Tilde{P}^{-1}D_1 (D_1^T \Tilde{P} D_1 - R)^{-1} D_1^T \Tilde{P}^{-1} - \tilde{P}^{-1} \\
-    R^{-1}D_1^T (D_1 R^{-1}D_1^T - \Tilde{P})^{-1} D_1 R^{-1} - R^{-1} = D_1^T \Tilde{P} D_1 - R\\
-    R^{-1} D_1^T (D_1 R^{-1} D_1^T - \Tilde{P})^{-1}= (D_1^T \Tilde{P} D_1 - R)^{-1} D_1^T \Tilde{P}^{-1}
-\end{align*}
-we get exactly \eqref{eq: markov_equiv1}, so the dual and primal HJB methods are equivalent. 
+\begin{equation}
+    P(t,i) = \tilde{P}^{-1}(t,i), \quad M(t,i) = -\tilde{P}^{-1}(t,i) \tilde{M}(t,i), \quad N(t,i) =  \frac12 \tilde{M}^T(t,i) \tilde{P}^{-1}(t,i) \tilde{M}(t,i) - \tilde{N}(t,i). \label{eq: markov_relation}
+\end{equation}
+In section \ref{Primal and Dual Equivalence} we have shown equivalence between the primal and dual HJB in the non-Markovian case. Now we work in a Markov setting, and the resulting ODEs from the primal and dual HJB methods are the same as the ones from the non-Markovian case, apart from the fact that the parameters now depend also on the Markov chain (not only on time) and there are also additional terms concerning the Markov chain. Therefore, we will only show here the equivalence between the additional terms, as the equivalence of the rest of the ODEs is already shown.\\
 
-
+The system of ODEs from the primal HJB is given by \eqref{eq: markov_ricatti1}, \eqref{eq: markov_ricatti2} and \eqref{eq: markov_ricatti3}
+\begin{align*}
+    \frac12 \frac{\d P(t,i)}{\d t} + A^T(t,i) P(t,i) + \vartheta_1^T B^T(t,i) P(t,i) + \frac12 \sum_{j=1}^d (C_j(t,i) + D_j(t,i) \vartheta_1)^T P(t,i) (C_j(t,i) +   D_j(t,i) \vartheta_1)\\
+    - \frac12 Q(t,i) - S^T(t,i) \vartheta_1 - \frac12 \vartheta_1^T R(t,i) \vartheta_1     + \frac12 \sum_{j \ne i}^k q_{ij} (P(t,j) - P(t,i)) = 0 \\
+    \frac{\d M(t,i)}{\d t} + A^T(t,i) M(t,i) +  \vartheta_1^T B^T(t,i) M(t,i) +  P(t,i) B(t,i) \kappa_1 \\
+    + \sum_{j=1}^d (C_j(t,i) + D_j(t,i) \vartheta_1)^T P(t,i) D_j 
+    \kappa_1  - S^T(t,i) \kappa_1 - \vartheta_1^T R(t,i) \kappa_1 + \sum_{j \ne i}^k q_{ij} (M(t,j) - M(t,i)) = 0 \\
+    + \frac{\d N(t,i)}{\d t} + \kappa_1^T M(t,i) + \frac12 \sum_{j=1}^d \kappa_1^T P(t,i) \kappa_1 - \frac12 \kappa_1^T R(t,i) \kappa_1+ \sum_{j \ne i}^k q_{ij}(N(t,j) - N(t,i)) = 0 
+\end{align*}
+with terminal conditions \eqref{eq: markov_hjb_terminal}:
+\begin{equation*}
+    P(T,i) = -G(T,i), \quad M(T,i) = - L(T,i), \quad N(T, i) = 0.
+\end{equation*}
+Similarly, the ODEs from the dual HJB are given by \eqref{eq: markov_dual_ricatti1}, \eqref{eq: markov_dual_ricatti2} and \eqref{eq: markov_dual_ricatti3}:
+\begin{align*}
+     \frac12 \frac{\d \Tilde{P}}{\d t}(t,i) + (\Tilde{\vartheta}^T - A(t,i) - \sum_{j=1}^d \Tilde{\vartheta}_j^T C_j^T(t,i))\Tilde{P}(t,i) + \frac12 \sum_{j=1}^d \Tilde{\vartheta}_j^T \Tilde{P}(t,i) \Tilde{\vartheta_j} - \frac12 \tilde{\vartheta}^T \tilde{Q}(t,i)\tilde{\vartheta}\\
+    - \tilde{\vartheta}^T \tilde{S}^T(t,i) \big(B^T(t,i) + \sum_{i=1}^d D_i^T(t,i) \tilde{\vartheta}_i \big)
+    - \frac12 \bigg(B(t,i) + \sum_{i=1}^d\tilde{\vartheta}_i^T D_i(t,i)\bigg) \tilde{R}(t,i) \bigg(B^T(t,i) + \sum_{i=1}^d D_i^T(t,i) \tilde{\vartheta}_i\bigg)\\
+    + \sum_{j\ne i}^k q_{ij}  \big[\frac12 \Tilde{P}(t,i) - \frac12 \Tilde{P}(t,i)\Tilde{P}^{-1}(t,j)\Tilde{P}(t,i)\big] = 0 \\
+    \frac{\d \Tilde{M}}{\d t}(t,i) + \Tilde{\vartheta}^T \Tilde{M}(t,i) - A(t,i) \Tilde{M}(t,i) + \Tilde{P}(t,i) \Tilde{\kappa} - \sum_{j=1}^d \Tilde{\vartheta}_j^T C_j^T(t,i) \Tilde{M}(t,i) + \sum_{j=1}^d \Tilde{P}(t,i) C_j(t,i) \Tilde{\kappa}_j\\
+    \Tilde{\vartheta}_j^T \Tilde{P}(t,i) \Tilde{\kappa}_j - \tilde{\vartheta}^T \Tilde{Q}(t,i) \Tilde{\kappa} - \Tilde{\vartheta}^T \Tilde{S}^T(t,i) \sum_{j=1}^d D_j^T(t,i) \Tilde{\kappa}_j - \bigg(B(t,i) + \sum_{j=1}^d \Tilde{\vartheta}_j^T D_j(t,i)\bigg)\Tilde{S}(t,i) \Tilde{\kappa}\\
+    - \bigg( B(t,i) + \sum_{j=1}^d \Tilde{\vartheta}_j^T D_j(t,i) \bigg) \Tilde{R}(t,i) \sum_{j=1}^d D_j^T \Tilde{\kappa}_j +\sum_{j\ne i}^k q_{ij} \Tilde{P}(t,i) \Tilde{P}^{-1}(t,j) (\Tilde{M}(t,j) - \Tilde{M}(t,i)) = 0 \\
+    \frac{\d \Tilde{N}}{\d t}(t,i) + \bigg(\Tilde{\kappa}^T - \sum_{j=1}^d \Tilde{\kappa}_j^T C_j^T(t,i)\bigg) \Tilde{M}(t,i) + \frac12 \sum_{j=1}^d \Tilde{\kappa}^T_j \Tilde{P}(t,i) \Tilde{\kappa}_j \\
+    - \frac12 \Tilde{\kappa}^T \Tilde{Q}(t,i) \Tilde{\kappa} - \Tilde{\kappa}^T \Tilde{S}^T \sum_{j=1}^d D_j^T(t,i) \Tilde{\kappa}_j - \frac12 \bigg(\sum_{j=1}^d \Tilde{\kappa}_j^T D_j(t,i)\bigg) \Tilde{R}(t,i) \bigg( \sum_{j=1}^d D_j^T(t,i) \Tilde{\kappa}_j\bigg)\\
+    + \sum_{j\ne i}^k q_{ij} \big[ \Tilde{N}(t,j) - \Tilde{N}(t,i) - \frac12 (\Tilde{M}^T(t,j) - \Tilde{M}^T(t,i)) \Tilde{P}^{-1}(t,j)(\Tilde{M}(t,j) - \Tilde{M}(t,i)) \big] = 0 
+\end{align*}
+where the terminal conditions are given by \eqref{eq: markov_dual_hjb_terminal_conditions}:
+\begin{equation*}
+    \tilde{P}(T,i) = -G^{-1}(T,i),  \tilde{M}(T,i) = - G^{-1}(T,i)L(T,i),  \tilde{N}(T,i) = \frac12 L^T(T,i)G^{-1}(T,i)L(T,i).
+\end{equation*}
+Using the relation \eqref{eq: markov_relation} it is easy to check that the terminal conditions are equivalent. Now, for the first ODE of the primal HJB, the additional terms are 
+\begin{equation*}
+    \frac12 \sum_{j \ne i}^k q_{ij} (P(t,j) - P(t,i))
+\end{equation*}
+When showing equivalence in section \ref{Primal and Dual Equivalence} we transformed the ODE from the primal by multiplying on both sides by $\Tilde{P}(t, i)$. Doing so to the additional term becomes
+\begin{align*}
+    \frac12 \sum_{j \ne i}^k q_{ij} \Tilde{P}(t,i)(P(t,j) - P(t,i)) \Tilde{P}(t,i) &=  \frac12 \sum_{j \ne i}^k q_{ij} \Tilde{P}(t,i)(\tilde{P}^{-1}(t,j) - \tilde{P}^{-1}(t,i)) \Tilde{P}(t,i)\\
+    &= \sum_{j\ne i}^k q_{ij} \bigg[\frac12 \Tilde{P}(t,i) \Tilde{P}^{-1}(t,j) \Tilde{P}(t,i) - \frac12 \tilde{P}(t,i)\bigg] 
+\end{align*}
 
